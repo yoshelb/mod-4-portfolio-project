@@ -43,6 +43,12 @@ module.exports = (sequelize, DataTypes) => {
           len: [60, 60],
         },
       },
+      firstName: {
+        type: DataTypes.STRING(50),
+      },
+      lastName: {
+        type: DataTypes.STRING(50),
+      },
     },
     {
       sequelize,
