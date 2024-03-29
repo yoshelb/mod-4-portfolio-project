@@ -67,6 +67,10 @@ app.use((err, _req, _res, next) => {
   next(err);
 });
 
+app.get("/", async (req, res) => {
+  res.json({ message: "This main page is alive" });
+});
+
 // LAST MIDDLEWARE
 // Error formatter
 app.use((err, _req, res, _next) => {
@@ -79,4 +83,5 @@ app.use((err, _req, res, _next) => {
     stack: isProduction ? null : err.stack,
   });
 });
+
 module.exports = app;
