@@ -1,4 +1,4 @@
-const { sequelize } = require("./config");
+const { sequelize } = require("./config/database");
 
 sequelize.showAllSchemas({ logging: false }).then(async (data) => {
   if (!data.includes(process.env.SCHEMA)) {
