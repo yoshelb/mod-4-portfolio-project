@@ -1,8 +1,12 @@
 # `<name of application here>`
 
+# Module-4-project
+
 ## Database Schema Design
 
-`<insert database schema design here>`
+![db-schema]
+
+[db-schema]: ./images/airbnb-db-schema.png
 
 ## API Documentation
 
