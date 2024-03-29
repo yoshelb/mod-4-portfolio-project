@@ -44,6 +44,10 @@ app.use(
 
 app.use(routes); // Connect all the routes
 
+app.get("/", async (req, res) => {
+  res.json({ message: "This main page is alive" });
+});
+
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
@@ -65,10 +69,6 @@ app.use((err, _req, _res, next) => {
     err.errors = errors;
   }
   next(err);
-});
-
-app.get("/", async (req, res) => {
-  res.json({ message: "This main page is alive" });
 });
 
 // LAST MIDDLEWARE
