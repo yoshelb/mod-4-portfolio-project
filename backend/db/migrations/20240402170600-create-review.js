@@ -1,5 +1,4 @@
 "use strict";
-
 /** @type {import('sequelize-cli').Migration} */
 
 let options = {};
@@ -10,7 +9,7 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "Spots",
+      "Reviews",
       {
         id: {
           allowNull: false,
@@ -18,46 +17,26 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        ownerId: {
+        spotId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Spots",
+            key: "id",
+          },
+        },
+        userId: {
           type: Sequelize.INTEGER,
           references: {
             model: "Users",
             key: "id",
           },
-          onDelete: "CASCADE",
-          allowNull: false,
         },
-        address: {
-          type: Sequelize.STRING(1000),
-          allowNull: false,
-        },
-        city: {
-          type: Sequelize.STRING(1000),
-          allowNull: false,
-        },
-        state: {
-          type: Sequelize.STRING(60),
-          allowNull: false,
-        },
-        country: {
-          type: Sequelize.STRING(60),
-          allowNull: false,
-        },
-        lat: {
-          type: Sequelize.DECIMAL,
-        },
-        lng: {
-          type: Sequelize.DECIMAL,
-        },
-        name: {
-          type: Sequelize.STRING(50),
-        },
-        description: {
+        review: {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        price: {
-          type: Sequelize.DECIMAL,
+        stars: {
+          type: Sequelize.INTEGER,
         },
         createdAt: {
           allowNull: false,
@@ -72,7 +51,7 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = "Spots";
+    options.tableName = "Reviews";
     await queryInterface.dropTable(options);
   },
 };
