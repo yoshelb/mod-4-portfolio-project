@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       // associates spot to owner
       Spot.belongsTo(models.User, { foreignKey: "ownerId" });
+      // spot to spotImages
+      Spot.hasMany(models.SpotImage, { foreignKey: "spotId" });
     }
   }
   Spot.init(
