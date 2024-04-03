@@ -1,4 +1,9 @@
-const { setTokenCookie, restoreUser } = require("../../utils/auth");
+const {
+  setTokenCookie,
+  restoreUser,
+  requireAuth,
+} = require("../../utils/auth");
+
 const {
   Spot,
   Booking,
@@ -8,56 +13,45 @@ const {
   User,
   Sequelize,
 } = require("../../db/models");
+
+const { findAllSpots } = require("../../utils/helpers");
 const express = require("express");
 
 const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
+const {
+  handleValidationErrors,
+  validateCreateSpot,
+} = require("../../utils/validation");
 
 const router = express.Router();
 
-const validateCreateSpot = [
-  check("address")
-    .exists({ checkFalsy: true })
-    .withMessage("Street address is required"),
-  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
-  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
-  check("country")
-    .exists({ checkFalsy: true })
-    .withMessage("Country is required"),
-  check("lat")
-    .isNumeric({ min: -90, max: 90 })
-    .withMessage("Latitude must be within -90 and 90"),
-  check("lng")
-    .isNumeric({ min: -180, max: 180 })
-    .withMessage("Longitude must be within -180 and 180"),
-  check("name")
-    .isLength({ min: 1, max: 50 })
-    .withMessage("Name must be less than 50 characters"),
-  check("description")
-    .exists({ checkFalsy: true })
-    .withMessage("Description is required"),
-  check("price")
-    .isNumeric({ min: 0 })
-    .withMessage("Price per day must be a positive number"),
-  handleValidationErrors,
-];
+// GET Spot by ID
+router.get("/:spotId", async (req, res, next) => {
+  const id = req.params.spotId;
 
-router.get("/", async (req, res, next) => {
-  const spots = await Spot.findAll({
+  const spot = await Spot.findByPk(id, {
     include: [
       {
         model: Review,
         attributes: [],
+        where: { spotId: id },
       },
       {
         model: SpotImage,
-        attributes: ["url"],
-        where: { preview: true },
-        limit: 1,
+        attributes: ["id", "url", "preview"],
+      },
+      {
+        model: User,
+        as: "Owner",
+        attributes: ["id", "firstName", "lastName"],
       },
     ],
     attributes: {
       include: [
+        [
+          Sequelize.fn("COUNT", Sequelize.literal("DISTINCT Reviews.id")),
+          "numReviews",
+        ],
         [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
       ],
       exclude: [],
@@ -65,25 +59,31 @@ router.get("/", async (req, res, next) => {
     group: ["Spot.id"],
   });
 
-  let newBody = [];
-  spots.forEach((spot) => {
-    let previewImage;
-    if (spot.SpotImages.length > 0) {
-      previewImage = spot.SpotImages[0].dataValues.url;
-    }
+  if (!spot) {
+    res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+  }
 
-    const spotWithExtraData = {
-      ...spot.dataValues,
-      previewImage,
-    };
+  res.json(spot);
+});
 
-    delete spotWithExtraData.SpotImages;
-
-    newBody.push(spotWithExtraData);
-  });
-
+// GET current User spot
+router.get("/current", requireAuth, async (req, res, next) => {
+  const ownerId = req.user.id;
+  console.log(ownerId);
+  const newBody = await findAllSpots({ where: { ownerId: ownerId } }); //helper func located in utils/helper
   res.json(newBody);
 });
-router.post("/", validateCreateSpot, async (req, res, next) => {});
+
+// Get all routes
+router.get("/", async (req, res, next) => {
+  let newBody = await findAllSpots(); //helper func located in utils/helper
+  res.json(newBody);
+});
+router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
+});
 
 module.exports = router;
