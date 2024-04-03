@@ -10,26 +10,33 @@ if (process.env.NODE_ENV === "production") {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await User.bulkCreate(
-      [
-        {
-          email: "demo@user.io",
-          username: "Demo-lition",
-          hashedPassword: bcrypt.hashSync("password"),
-        },
-        {
-          email: "user1@user.io",
-          username: "FakeUser1",
-          hashedPassword: bcrypt.hashSync("password2"),
-        },
-        {
-          email: "user2@user.io",
-          username: "FakeUser2",
-          hashedPassword: bcrypt.hashSync("password3"),
-        },
-      ],
-      { validate: true }
-    );
+    try {
+      await User.bulkCreate(
+        [
+          {
+            id: 1,
+            email: "demo@user.io",
+            username: "Demo-lition",
+            hashedPassword: bcrypt.hashSync("password"),
+          },
+          {
+            id: 2,
+            email: "user1@user.io",
+            username: "FakeUser1",
+            hashedPassword: bcrypt.hashSync("password2"),
+          },
+          {
+            id: 3,
+            email: "user2@user.io",
+            username: "FakeUser2",
+            hashedPassword: bcrypt.hashSync("password3"),
+          },
+        ],
+        { validate: true }
+      );
+    } catch (e) {
+      console.log("users-seed error", e);
+    }
   },
 
   async down(queryInterface, Sequelize) {
