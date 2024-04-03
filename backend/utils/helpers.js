@@ -29,7 +29,7 @@ const findAllSpots = async (whereObj = undefined) => {
       ],
       exclude: [],
     },
-    group: ["Spot.Id"],
+    group: ["Spot.id"],
   });
 
   let newBody = [];
