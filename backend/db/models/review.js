@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
           model: "Spots",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       userId: {
         type: DataTypes.INTEGER,
@@ -33,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
           model: "Users",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       review: {
         type: DataTypes.STRING,
