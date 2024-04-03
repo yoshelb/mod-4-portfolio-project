@@ -39,6 +39,10 @@ const findAllSpots = async (whereObj = undefined) => {
       previewImage = spot.SpotImages[0].dataValues.url;
     }
 
+    if (spot.dataValues.avgRating !== null) {
+      spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
+    }
+
     const spotWithExtraData = {
       ...spot.dataValues,
       previewImage,

@@ -73,6 +73,10 @@ router.get("/:spotId", async (req, res, next) => {
     });
   }
 
+  if (spot.dataValues.avgRating !== null) {
+    spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
+  }
+
   res.json(spot);
 });
 
