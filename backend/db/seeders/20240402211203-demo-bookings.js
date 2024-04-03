@@ -14,18 +14,21 @@ module.exports = {
       await Booking.bulkCreate(
         [
           {
+            id: 1,
             spotId: 1,
             userId: 1,
             startDate: "2024-08-02",
             endDate: "2024-08-06",
           },
           {
+            id: 2,
             spotId: 2,
             userId: 2,
             startDate: "2024-08-02",
             endDate: "2024-08-06",
           },
           {
+            id: 3,
             spotId: 3,
             userId: 3,
             startDate: "2024-08-02",
@@ -45,22 +48,23 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        url: {
-          [Op.in]: [
-            {
-              spotId: 1,
-              userId: 1,
-            },
-            {
-              spotId: 2,
-              userId: 2,
-            },
-            {
-              spotId: 3,
-              userId: 3,
-            },
-          ],
-        },
+        [Op.and]: [
+          {
+            id: 1,
+            spotId: 1,
+            userId: 1,
+          },
+          {
+            id: 2,
+            spotId: 2,
+            userId: 2,
+          },
+          {
+            id: 3,
+            spotId: 3,
+            userId: 3,
+          },
+        ],
       },
       {}
     );

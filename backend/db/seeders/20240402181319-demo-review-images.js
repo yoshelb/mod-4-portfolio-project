@@ -14,14 +14,17 @@ module.exports = {
       await ReviewImage.bulkCreate(
         [
           {
+            id: 1,
             reviewId: 1,
             url: "https://example.com/image1.jpg",
           },
           {
+            id: 2,
             reviewId: 2,
             url: "https://example.com/image2.jpg",
           },
           {
+            id: 3,
             reviewId: 3,
             url: "https://example.com/image3.jpg",
           },

@@ -14,6 +14,7 @@ module.exports = {
       await Spot.bulkCreate(
         [
           {
+            id: 1,
             ownerId: 1,
             address: "123 Disney Lane",
             city: "San Francisco",
@@ -26,6 +27,7 @@ module.exports = {
             price: 123,
           },
           {
+            id: 2,
             ownerId: 2,
             address: "405 Davis Ct",
             city: "San Francisco",
@@ -38,6 +40,7 @@ module.exports = {
             price: 10.27,
           },
           {
+            id: 3,
             ownerId: 3,
             address: "55 Anchor Dr.",
             city: "San Francisco",

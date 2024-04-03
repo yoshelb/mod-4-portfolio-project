@@ -19,12 +19,17 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "userId",
         foreignKey: "spotId",
       });
+
+      Spot.hasMany(models.Review, { foreignKey: "spotId" });
       //many to many through Booking to users
       Spot.belongsToMany(models.User, {
         through: "Booking",
         otherKey: "userId",
         foreignKey: "spotId",
       });
+
+      //direct to booking
+      Spot.hasMany(models.Booking, { foreignKey: "spotId" });
     }
   }
   Spot.init(

@@ -35,6 +35,13 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "SpotImage",
       allowNull: false,
+      indexes: [
+        {
+          unique: true,
+          fields: ["spotId"],
+          where: { preview: true },
+        },
+      ],
     }
   );
   return SpotImage;
