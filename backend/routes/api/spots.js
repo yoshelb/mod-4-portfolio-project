@@ -41,8 +41,8 @@ router.get("/:spotId", async (req, res, next) => {
     include: [
       {
         model: Review,
-        attributes: [],
-        where: { spotId: id },
+        attributes: ["id"],
+        // where: { spotId: id },
       },
       {
         model: SpotImage,
@@ -73,7 +73,7 @@ router.get("/:spotId", async (req, res, next) => {
     });
   }
 
-  if (spot.dataValues.avgRating !== null) {
+  if (typeof spot.dataValues.avgRating === "number") {
     spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
   }
 
