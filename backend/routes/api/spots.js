@@ -59,7 +59,6 @@ router.get("/:spotId", async (req, res, next) => {
       ],
       exclude: [],
     },
-    group: ["Spot.id"],
   });
 
   if (!spot) {

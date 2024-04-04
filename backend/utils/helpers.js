@@ -39,21 +39,22 @@ const findAllSpots = async (whereObj = undefined) => {
       previewImage = spot.SpotImages[0].dataValues.url;
     }
 
-    spot.dataValues.avgRating = parseFloat(spot.dataValues.avgRating);
-
-    if (typeof spot.dataValues.avgRating === "number") {
-      spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
-    }
-
     const spotWithExtraData = {
       ...spot.dataValues,
       previewImage,
     };
 
+    spotWithExtraData.avgRating = parseFloat(spotWithExtraData.avgRating);
+
+    if (typeof spot.dataValues.avgRating === "number") {
+      spotWithExtraData.avgRating = spotWithExtraData.avgRating;
+    }
+
     delete spotWithExtraData.SpotImages;
 
     newBody.push(spotWithExtraData);
   });
+
   return newBody;
 };
 
