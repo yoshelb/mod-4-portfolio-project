@@ -41,7 +41,7 @@ router.get("/:spotId", async (req, res, next) => {
     include: [
       {
         model: Review,
-        attributes: [],
+        attributes: ["id"],
       },
       {
         model: SpotImage,
@@ -55,12 +55,10 @@ router.get("/:spotId", async (req, res, next) => {
     ],
     attributes: {
       include: [
-        [Sequelize.fn("COUNT", Sequelize.col("Reviews.id")), "numReviews"],
         [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
       ],
       exclude: [],
     },
-    group: ["Reviews.id"],
   });
 
   if (!spot) {
@@ -68,12 +66,19 @@ router.get("/:spotId", async (req, res, next) => {
       message: "Spot couldn't be found",
     });
   }
+  spot.dataValues.avgRating = parseFloat(spot.dataValues.avgRating);
 
   if (typeof spot.dataValues.avgRating === "number") {
     spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
   }
+  const numReviews = spot.dataValues.Reviews.length;
 
-  res.json(spot);
+  let spotCopy = { ...spot.dataValues, numReviews };
+  console.log(spotCopy);
+
+  delete spotCopy.Reviews;
+
+  res.json(spotCopy);
 });
 
 // Get all routes
