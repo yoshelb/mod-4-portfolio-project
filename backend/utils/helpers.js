@@ -44,18 +44,44 @@ const findAllSpots = async (whereObj = undefined) => {
       previewImage,
     };
 
-    spotWithExtraData.avgRating = parseFloat(spotWithExtraData.avgRating);
-
-    if (typeof spot.dataValues.avgRating === "number") {
-      spotWithExtraData.avgRating = spotWithExtraData.avgRating;
-    }
-
     delete spotWithExtraData.SpotImages;
+    const formattedBody = formatSpotResponse(spotWithExtraData);
 
-    newBody.push(spotWithExtraData);
+    newBody.push(formattedBody);
   });
 
   return newBody;
 };
 
-module.exports = { findAllSpots };
+function formatSpotResponse(spot) {
+  spot.price = parseFloat(spot.price);
+  spot.lat = parseFloat(spot.lat);
+  spot.lng = parseFloat(spot.lng);
+
+  spot.createdAt = spot.createdAt
+    .toISOString()
+    .split("T")
+    .join(" ")
+    .split("Z")
+    .join(" ")
+    .split(".")
+    .slice(0, -1)
+    .join(" ");
+
+  spot.updatedAt = spot.updatedAt
+    .toISOString()
+    .split("T")
+    .join(" ")
+    .split("Z")
+    .join(" ")
+    .split(".")
+    .slice(0, -1)
+    .join(" ");
+
+  if (typeof spot.avgRating === "string") {
+    spot.avgRating = parseFloat(spot.avgRating).toFixed(2);
+  }
+  return spot;
+}
+
+module.exports = { findAllSpots, formatSpotResponse };

@@ -14,7 +14,7 @@ const {
   Sequelize,
 } = require("../../db/models");
 
-const { findAllSpots } = require("../../utils/helpers");
+const { findAllSpots, formatSpotResponse } = require("../../utils/helpers");
 const express = require("express");
 
 const { check } = require("express-validator");
@@ -41,7 +41,7 @@ router.get("/:spotId", async (req, res, next) => {
     include: [
       {
         model: Review,
-        attributes: ["id"],
+        attributes: ["id", "stars"],
       },
       {
         model: SpotImage,
@@ -53,12 +53,12 @@ router.get("/:spotId", async (req, res, next) => {
         attributes: ["id", "firstName", "lastName"],
       },
     ],
-    attributes: {
-      include: [
-        [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
-      ],
-      exclude: [],
-    },
+    // attributes: {
+    //   include: [
+    //     [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
+    //   ],
+    //   exclude: [],
+    // },
   });
 
   if (!spot) {
@@ -66,19 +66,25 @@ router.get("/:spotId", async (req, res, next) => {
       message: "Spot couldn't be found",
     });
   }
-  spot.dataValues.avgRating = parseFloat(spot.dataValues.avgRating);
 
-  if (typeof spot.dataValues.avgRating === "number") {
-    spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
-  }
   const numReviews = spot.dataValues.Reviews.length;
 
-  let spotCopy = { ...spot.dataValues, numReviews };
-  console.log(spotCopy);
+  // NEED TO WORK OUT THE AVG STAR RATING "avgRating and add it to spotCopy"
+  const avgRating =
+    spot.dataValues.Reviews.reduce((acc, obj) => {
+      acc += obj.stars;
+      return acc;
+    }, 0) / numReviews;
+
+  console.log(avgRating);
+
+  let spotCopy = { ...spot.dataValues, numReviews, avgRating };
 
   delete spotCopy.Reviews;
 
-  res.json(spotCopy);
+  const spotRes = formatSpotResponse(spotCopy);
+
+  res.json(spotRes);
 });
 
 // Get all routes
@@ -136,8 +142,9 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
     description,
     price,
   });
+  const formattedSpot = formatSpotResponse({ ...newSpot.dataValues });
 
-  res.json(newSpot);
+  res.status(201).json(formattedSpot);
 });
 
 // Edit a spot
@@ -186,7 +193,8 @@ router.put(
       price: price,
     });
 
-    res.json(spot);
+    const formattedSpot = formatSpotResponse({ ...spot.dataValues });
+    res.json(formattedSpot);
   }
 );
 
