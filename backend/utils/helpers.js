@@ -40,7 +40,7 @@ const findAllSpots = async (whereObj = undefined) => {
     }
 
     if (typeof spot.dataValues.avgRating === "string")
-      parseFloat(spot.dataValues.avgRating);
+      spot.dataValues.avgRating = parseFloat(spot.dataValues.avgRating);
 
     if (typeof spot.dataValues.avgRating === "number") {
       spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
