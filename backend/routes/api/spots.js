@@ -100,17 +100,33 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   const { url, preview } = req.body;
 
   const spot = await Spot.findByPk(spotId);
+
   if (spot.ownerId !== ownerId) {
     res.status(403).json({
       message: "Forbidden",
     });
   }
+
   if (!spot) {
     res.status(404).json({
       message: "Spot couldn't be found",
     });
   }
-  console.log(spot.toJSON());
+
+  const previewImage = await SpotImage.findOne({
+    where: {
+      spotId: spotId,
+      preview: true,
+    },
+  });
+  console.log(previewImage);
+
+  if (previewImage && preview == true) {
+    res
+      .status(400)
+      .json({ message: "You may only set one preview image per spot" });
+  }
+
   let spotImage = await spot.createSpotImage({
     url,
     preview,
