@@ -220,7 +220,6 @@ router.put(
 
 router.delete("/:spotId", requireAuth, async (req, res, next) => {
   const ownerId = req.user.id; //current owner id
-  console.log(ownerId);
   const { spotId } = req.params;
 
   const spot = await Spot.findByPk(spotId);
