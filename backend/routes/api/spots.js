@@ -41,8 +41,7 @@ router.get("/:spotId", async (req, res, next) => {
     include: [
       {
         model: Review,
-        attributes: ["id"],
-        // where: { spotId: id },
+        attributes: [],
       },
       {
         model: SpotImage,
@@ -56,10 +55,7 @@ router.get("/:spotId", async (req, res, next) => {
     ],
     attributes: {
       include: [
-        [
-          Sequelize.fn("COUNT", Sequelize.literal("DISTINCT Reviews.id")),
-          "numReviews",
-        ],
+        [Sequelize.fn("COUNT", Sequelize.col("Reviews.id")), "numReviews"],
         [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
       ],
       exclude: [],
