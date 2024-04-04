@@ -40,8 +40,9 @@ const findAllSpots = async (whereObj = undefined) => {
     }
 
     if (
-      spot.dataValues.avgRating !== null &&
-      !isNaN(spot.dataValues.avgRating)
+      // spot.dataValues.avgRating !== null &&
+      // !isNaN(spot.dataValues.avgRating)
+      typeof spot.dataValues.avgRating === "number"
     ) {
       spot.dataValues.avgRating = spot.dataValues.avgRating.toFixed(2);
     }
