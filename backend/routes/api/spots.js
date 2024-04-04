@@ -21,6 +21,7 @@ const { check } = require("express-validator");
 const {
   handleValidationErrors,
   validateCreateSpot,
+  validateCreateReview,
 } = require("../../utils/validation");
 
 const router = express.Router();
@@ -141,6 +142,84 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   res.json(returnImage);
 });
 
+// CREATE new spot review by id
+
+router.post(
+  "/:spotId/reviews",
+  requireAuth,
+  validateCreateReview,
+  async (req, res, next) => {
+    const userId = req.user.id;
+    const { spotId } = req.params;
+
+    const { review, stars } = req.body;
+    const spot = await Spot.findByPk(spotId);
+
+    if (!spot) {
+      return res.status(404).json({
+        message: "Spot couldn't be found",
+      });
+    }
+
+    const userSpotReviews = await Review.findOne({
+      where: {
+        spotId: spotId,
+        userId: userId,
+      },
+    });
+
+    if (userSpotReviews) {
+      return res.status(500).json({
+        message: "User already has a review for this spot",
+      });
+    }
+
+    const newReview = await spot.createReview({
+      review: review,
+      stars: stars,
+      userId: userId,
+    });
+
+    const reviewWithId = await Review.findOne({
+      where: {
+        userId: userId,
+        spotId: spotId,
+      },
+      attributes: [
+        "id",
+        "spotId",
+        "userId",
+        "review",
+        "stars",
+        "createdAt",
+        "updatedAt",
+      ],
+    });
+    const formattedRes = { ...reviewWithId.dataValues };
+    formattedRes.createdAt = formattedRes.createdAt
+      .toISOString()
+      .split("T")
+      .join(" ")
+      .split("Z")
+      .join(" ")
+      .split(".")
+      .slice(0, -1)
+      .join(" ");
+
+    formattedRes.updatedAt = formattedRes.updatedAt
+      .toISOString()
+      .split("T")
+      .join(" ")
+      .split("Z")
+      .join(" ")
+      .split(".")
+      .slice(0, -1)
+      .join(" ");
+
+    res.status(201).json(formattedRes);
+  }
+);
+
 // CREATE a new spot
 router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   const ownerId = req.user.id;
@@ -213,8 +292,6 @@ router.put(
     res.json(formattedSpot);
   }
 );
-
-// DELETE Spot Image
 
 // DELETE a Spot
 
