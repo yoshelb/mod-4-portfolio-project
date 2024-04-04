@@ -54,10 +54,12 @@ router.get("/current", requireAuth, async (req, res, next) => {
 
   for (let review in allReviewsWithUser) {
     const reviewCopy = { ...allReviewsWithUser[review].dataValues };
-    const images = await ReviewImage.findAll({
-      where: { reviewId: reviewCopy.id },
-    });
 
+    const revImages = await ReviewImage.findAll({
+      where: { reviewId: reviewCopy.id },
+      attributes: ["id", "url"],
+    });
+    console.log("REVIEW IMAGE", revImages);
     const spot = await Spot.findByPk(reviewCopy.spotId, {
       attributes: {
         exclude: ["createdAt", "updatedAt", "description"],
@@ -104,7 +106,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
 
     const newReview = {
       ...reviewCopy,
-      ReviewImages: [images.dataValues],
+      ReviewImages: [...revImages],
       Spot: { ...spotCopy },
     };
     newBody.Reviews.push(newReview);
