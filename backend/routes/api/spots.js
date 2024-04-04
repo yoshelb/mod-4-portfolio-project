@@ -169,7 +169,7 @@ router.post(
     });
 
     if (userSpotReviews) {
-      return res.status(500).json({
+      return res.status(403).json({
         message: "User already has a review for this spot",
       });
     }
