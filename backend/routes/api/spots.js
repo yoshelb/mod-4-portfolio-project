@@ -162,7 +162,8 @@ router.post(
       return res.status(400).json({ message: "Bad Request", errors: errors });
     }
 
-    const { userId } = req.user.id;
+    const userId = req.user.id;
+    console.log(userId);
     const { spotId } = req.params;
     const spot = await Spot.findByPk(spotId, {
       include: {
