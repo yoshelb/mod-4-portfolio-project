@@ -132,7 +132,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
     });
   }
 
-  const reviewImage = await Image.create({
+  const reviewImage = await ReviewImage.create({
     url: url,
   });
 
@@ -172,5 +172,29 @@ router.put(
     res.json(reviewCopy);
   }
 );
+
+// DELETE a REVIEW
+
+router.delete("/:reviewId", requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
+  const { reviewId } = req.params;
+  const reviewWhole = await Review.findByPk(reviewId);
+
+  if (!reviewWhole) {
+    return res.status(404).json({
+      message: "Review couldn't be found",
+    });
+  }
+
+  if (reviewWhole.dataValues.userId !== userId) {
+    return res.status(403).json({ message: "forbidden" });
+  }
+
+  reviewWhole.destroy();
+
+  res.status(200).json({
+    message: "Successfully deleted",
+  });
+});
 
 module.exports = router;
