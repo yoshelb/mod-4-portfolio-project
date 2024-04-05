@@ -102,7 +102,14 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
 
   const bookingInfo = [];
   if (spot.dataValues.ownerId === userId) {
-    bookingInfo.push(...spot.dataValues.Bookings);
+    const spotCopy = [...spot.dataValues.Bookings];
+    for (let booking of spotCopy) {
+      booking.dataValues.updatedAt = formatDate(booking.dataValues.updatedAt);
+      booking.dataValues.createdAt = formatDate(booking.dataValues.createdAt);
+      booking.dataValues.startDate = formatDate(booking.dataValues.startDate);
+      booking.dataValues.endDate = formatDate(booking.dataValues.endDate);
+    }
+    bookingInfo.push(spotCopy);
   } else {
     const spotCopy = [...spot.dataValues.Bookings];
 
@@ -112,6 +119,8 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
       delete booking.dataValues.createdAt;
       delete booking.dataValues.updatedAt;
       delete booking.dataValues.userId;
+      booking.dataValues.startDate = formatDate(booking.dataValues.startDate);
+      booking.dataValues.endDate = formatDate(booking.dataValues.endDate);
     }
     bookingInfo.push(spotCopy);
   }
