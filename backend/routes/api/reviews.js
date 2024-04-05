@@ -111,6 +111,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
   const userId = req.user.id;
   const { reviewId } = req.params;
   const { url } = req.body;
+
   const review = await Review.findByPk(reviewId, {
     include: {
       model: ReviewImage,
@@ -131,11 +132,45 @@ router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
     });
   }
 
-  const reviewImage = await review.createReviewImage({
-    url,
+  const reviewImage = await Image.create({
+    url: url,
   });
+
+  review.addReviewImage(reviewImage);
 
   res.json({ url: reviewImage.dataValues.url, id: reviewImage.dataValues.id });
 });
+
+// EDIT a REVIEW-------------------------------------------------------
+router.put(
+  "/:reviewId",
+  requireAuth,
+  validateCreateReview,
+  async (req, res, next) => {
+    const userId = req.user.id;
+    const { reviewId } = req.params;
+    const { review, stars } = req.body;
+    const reviewWhole = await Review.findByPk(reviewId);
+
+    if (!reviewWhole) {
+      return res.status(404).json({
+        message: "Review couldn't be found",
+      });
+    }
+
+    if (reviewWhole.dataValues.userId !== userId) {
+      return res.status(403).json({ message: "forbidden" });
+    }
+
+    reviewWhole.update({
+      review: review,
+      stars: stars,
+    });
+    const reviewCopy = { ...reviewWhole.dataValues };
+    reviewCopy.createdAt = formatDate(reviewCopy.createdAt);
+    reviewCopy.updatedAt = formatDate(reviewCopy.updatedAt);
+    res.json(reviewCopy);
+  }
+);
 
 module.exports = router;
