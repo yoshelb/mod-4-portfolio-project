@@ -85,4 +85,123 @@ router.get("/current", requireAuth, async (req, res, next) => {
   res.json({ Bookings: bookingsCopy });
 });
 
+// EDIT A BOOKING
+
+router.put(
+  "/:bookingId",
+  requireAuth,
+
+  async (req, res, next) => {
+    const { startDate, endDate } = req.body;
+
+    // VALIDATE REQDATES____________________________________________
+    const today = new Date().toISOString().split("T")[0];
+    const errors = [];
+    const parsedStartDate = new Date(startDate).getTime();
+    const parsedEndDate = new Date(endDate).getTime();
+    const parsedToday = new Date(today).getTime();
+
+    if (parsedStartDate <= parsedToday) {
+      const error = new Error("startDate cannot be in the past");
+      errors.push({ startDate: error.message });
+    }
+
+    if (parsedEndDate < parsedStartDate) {
+      const error = new Error("endDate cannot be on or before startDate");
+      errors.push({ endDate: error.message });
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({ message: "Bad Request", errors: errors });
+    }
+
+    if (parsedEndDate <= parsedToday) {
+      return res.status(403).json({
+        message: "Past bookings can't be modified",
+      });
+    }
+    //VALIDATE BELONGS TO USER________________________________________
+    const userId = req.user.id;
+
+    const { bookingId } = req.params;
+    const bookingToUpdate = await Booking.findByPk(bookingId);
+
+    if (!bookingToUpdate) {
+      res.status(404).json({
+        message: "Booking couldn't be found",
+      });
+    }
+
+    if (bookingToUpdate.dataValues.userId !== userId) {
+      res.status(403).json({
+        message: "Forbidden",
+      });
+    }
+
+    // VALIDATE NO BOOKING CONFLICTS_______________________________________
+    const spot = await Spot.findByPk(bookingToUpdate.dataValues.spotId, {
+      include: {
+        model: Booking,
+        attributes: ["startDate", "endDate"],
+      },
+    });
+    const bookingErrors = {};
+
+    for (let booking of spot.dataValues.Bookings) {
+      const bookingCopy = { ...booking.dataValues };
+      const parsedBookingStart = new Date(bookingCopy.startDate).getTime();
+      const parsedBookingEnd = new Date(bookingCopy.endDate).getTime();
+
+      if (
+        parsedBookingStart == parsedStartDate ||
+        parsedBookingEnd == parsedStartDate ||
+        (parsedBookingStart <= parsedStartDate &&
+          parsedBookingEnd >= parsedStartDate)
+      ) {
+        if (!bookingErrors.startDate) {
+          const error = new Error(
+            "Start date conflicts with an existing booking"
+          );
+          bookingErrors.startDate = error.message;
+        }
+      }
+
+      if (
+        parsedBookingStart == parsedEndDate ||
+        parsedBookingEnd == parsedEndDate ||
+        (parsedBookingStart <= parsedEndDate &&
+          parsedBookingEnd >= parsedEndDate)
+      ) {
+        if (!bookingErrors.endDate) {
+          const error = new Error(
+            "End date conflicts with an existing booking"
+          );
+          bookingErrors.endDate = error.message;
+        }
+      }
+    }
+
+    if (Object.keys(bookingErrors).length > 0) {
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specified dates",
+        errors: bookingErrors,
+      });
+    }
+    //   FINALLY ___________________Update booking______________________
+
+    bookingToUpdate.update({
+      startDate: startDate,
+      endDate: endDate,
+    });
+
+    const resBooking = { ...bookingToUpdate.dataValues };
+    resBooking.startDate = formatDate(resBooking.startDate);
+    resBooking.endDate = formatDate(resBooking.endDate);
+    resBooking.createdAt = formatDate(resBooking.createdAt);
+    resBooking.updatedAt = formatDate(resBooking.updatedAt);
+
+    res.json(resBooking);
+  }
+);
+
 module.exports = router;
