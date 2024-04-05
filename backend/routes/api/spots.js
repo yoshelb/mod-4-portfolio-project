@@ -26,6 +26,7 @@ const {
   handleValidationErrors,
   validateCreateSpot,
   validateCreateReview,
+  validateCreateBooking,
 } = require("../../utils/validation");
 
 const router = express.Router();
@@ -132,6 +133,116 @@ router.get("/", async (req, res, next) => {
   let newBody = await findAllSpots(); //helper func located in utils/helper
   res.json(newBody);
 });
+
+// CREATE A BOOKING by spot id
+
+router.post(
+  "/:spotId/bookings",
+  requireAuth,
+
+  async (req, res, next) => {
+    const { startDate, endDate } = req.body;
+    const today = new Date().toISOString().split("T")[0];
+    const errors = [];
+    const parsedStartDate = new Date(startDate).getTime();
+    const parsedEndDate = new Date(endDate).getTime();
+    const parsedToday = new Date(today).getTime();
+
+    if (parsedStartDate <= parsedToday) {
+      const error = new Error("startDate cannot be in the past");
+      errors.push({ startDate: error.message });
+    }
+
+    if (parsedEndDate < parsedStartDate) {
+      const error = new Error("endDate cannot be on or before startDate");
+      errors.push({ endDate: error.message });
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({ message: "Bad Request", errors: errors });
+    }
+
+    const { userId } = req.user.id;
+    const { spotId } = req.params;
+    const spot = await Spot.findByPk(spotId, {
+      include: {
+        model: Booking,
+        attributes: ["startDate", "endDate"],
+      },
+    });
+
+    if (!spot) {
+      res.status(404).json({
+        message: "Spot couldn't be found",
+      });
+    }
+
+    if (spot.dataValues.ownerId === userId) {
+      res.status(403).json({
+        message: "Forbidden",
+      });
+    }
+
+    const bookingErrors = {};
+
+    for (let booking of spot.dataValues.Bookings) {
+      const bookingCopy = { ...booking.dataValues };
+      const parsedBookingStart = new Date(bookingCopy.startDate).getTime();
+      const parsedBookingEnd = new Date(bookingCopy.endDate).getTime();
+
+      console.log(
+        "PARSED BOOKING AND PARSED START DATE",
+        parsedBookingStart == parsedStartDate
+      );
+      if (
+        parsedBookingStart == parsedStartDate ||
+        parsedBookingEnd == parsedStartDate ||
+        (parsedBookingStart <= parsedStartDate &&
+          parsedBookingEnd >= parsedStartDate)
+      ) {
+        if (!bookingErrors.startDate) {
+          const error = new Error(
+            "Start date conflicts with an existing booking"
+          );
+          bookingErrors.startDate = error.message;
+        }
+      }
+
+      if (
+        parsedBookingStart == parsedEndDate ||
+        parsedBookingEnd == parsedEndDate ||
+        (parsedBookingStart <= parsedEndDate &&
+          parsedBookingEnd >= parsedEndDate)
+      ) {
+        if (!bookingErrors.endDate) {
+          const error = new Error(
+            "End date conflicts with an existing booking"
+          );
+          bookingErrors.endDate = error.message;
+        }
+      }
+    }
+
+    if (Object.keys(bookingErrors).length > 0) {
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specified dates",
+        errors: bookingErrors,
+      });
+    }
+
+    const newBooking = await spot.createBooking({
+      userId: userId,
+      startDate: startDate,
+      endDate: endDate,
+    });
+    const newBookingCopy = { ...newBooking.dataValues };
+    newBookingCopy.startDate = formatDate(newBookingCopy.startDate);
+    newBookingCopy.endDate = formatDate(newBookingCopy.endDate);
+    newBookingCopy.createdAt = formatDate(newBookingCopy.createdAt);
+    newBookingCopy.updatedAt = formatDate(newBookingCopy.updatedAt);
+    res.json(newBookingCopy);
+  }
+);
 
 //Add an Image to a spot
 router.post("/:spotId/images", requireAuth, async (req, res, next) => {

@@ -60,9 +60,24 @@ const validateCreateReview = [
     .withMessage("Stars must be an integer from 1 to 5"),
   handleValidationErrors,
 ];
+const today = new Date().toISOString().split("T")[0];
+const validateCreateBooking = [
+  check("startDate")
+    .isAfter(today)
+    .withMessage("startDate cannot be in the past"),
+  check("endDate").custom((endDate, req) => {
+    console.log(req);
+    const { startDate } = req.transformedData;
+    if (endDate <= startDate) {
+      throw new Error("endDate cannot be on or before startDate");
+    }
+  }),
+  handleValidationErrors,
+];
 
 module.exports = {
   handleValidationErrors,
   validateCreateSpot,
   validateCreateReview,
+  validateCreateBooking,
 };
