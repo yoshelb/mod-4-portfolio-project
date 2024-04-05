@@ -12,21 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       // associates spot to owner
       User.hasMany(models.Spot, { foreignKey: "ownerId" });
-      //many to many through reviews user to spots
-      User.belongsToMany(models.Spot, {
-        through: "Review",
-        otherKey: "spotId",
-        foreignKey: "userId",
-      });
+
       //direct to Review
       User.hasMany(models.Review, { foreignKey: "userId" });
-
-      //many to many through bookings to spot
-      User.belongsToMany(models.Spot, {
-        through: "Booking",
-        otherKey: "spotId",
-        foreignKey: "userId",
-      });
 
       //direct to Booking
       User.hasMany(models.Booking, { foreignKey: "userId" });

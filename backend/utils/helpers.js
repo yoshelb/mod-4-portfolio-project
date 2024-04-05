@@ -58,25 +58,9 @@ function formatSpotResponse(spot) {
   spot.lat = parseFloat(spot.lat);
   spot.lng = parseFloat(spot.lng);
 
-  spot.createdAt = spot.createdAt
-    .toISOString()
-    .split("T")
-    .join(" ")
-    .split("Z")
-    .join(" ")
-    .split(".")
-    .slice(0, -1)
-    .join(" ");
+  spot.createdAt = formatDate(spot.createdAt);
 
-  spot.updatedAt = spot.updatedAt
-    .toISOString()
-    .split("T")
-    .join(" ")
-    .split("Z")
-    .join(" ")
-    .split(".")
-    .slice(0, -1)
-    .join(" ");
+  spot.updatedAt = formatDate(spot.updatedAt);
 
   if (typeof spot.avgRating === "string") {
     spot.avgRating = parseFloat(spot.avgRating).toFixed(2);
@@ -84,4 +68,16 @@ function formatSpotResponse(spot) {
   return spot;
 }
 
-module.exports = { findAllSpots, formatSpotResponse };
+function formatDate(dateString) {
+  return dateString
+    .toISOString()
+    .split("T")
+    .join(" ")
+    .split("Z")
+    .join(" ")
+    .split(".")
+    .slice(0, -1)
+    .join(" ");
+}
+
+module.exports = { findAllSpots, formatSpotResponse, formatDate };

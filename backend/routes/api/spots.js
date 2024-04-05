@@ -14,7 +14,11 @@ const {
   Sequelize,
 } = require("../../db/models");
 
-const { findAllSpots, formatSpotResponse } = require("../../utils/helpers");
+const {
+  findAllSpots,
+  formatSpotResponse,
+  formatDate,
+} = require("../../utils/helpers");
 const express = require("express");
 
 const { check } = require("express-validator");
@@ -32,6 +36,45 @@ router.get("/current", requireAuth, async (req, res, next) => {
   console.log(ownerId);
   const newBody = await findAllSpots({ where: { ownerId: ownerId } }); //helper func located in utils/helper
   res.json(newBody);
+});
+
+// GET REVIEWS by Spot ID
+router.get("/:spotId/reviews", async (req, res, next) => {
+  const spotId = req.params.spotId;
+
+  const reviews = await Review.findAll({
+    where: { spotId: spotId },
+    include: [
+      {
+        model: ReviewImage,
+        attributes: ["id", "url"],
+      },
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+        on: {
+          id: Sequelize.col("Review.userId"),
+        },
+      },
+    ],
+  });
+
+  console.log(reviews);
+
+  if (reviews.length <= 0) {
+    res.status(404).json({ message: "Spot couldn't be found" });
+  }
+
+  const reviewsCopy = [...reviews];
+  const resReviews = [];
+  for (let review of reviewsCopy) {
+    review = review.toJSON();
+    review.createdAt = formatDate(review.createdAt);
+    review.updatedAt = formatDate(review.updatedAt);
+    resReviews.push(review);
+  }
+
+  res.json({ Reviews: resReviews });
 });
 
 // GET Spot by ID
@@ -70,7 +113,6 @@ router.get("/:spotId", async (req, res, next) => {
 
   const numReviews = spot.dataValues.Reviews.length;
 
-  // NEED TO WORK OUT THE AVG STAR RATING "avgRating and add it to spotCopy"
   const avgRating =
     spot.dataValues.Reviews.reduce((acc, obj) => {
       acc += obj.stars;
@@ -196,26 +238,8 @@ router.post(
       ],
     });
     const formattedRes = { ...reviewWithId.dataValues };
-    formattedRes.createdAt = formattedRes.createdAt
-      .toISOString()
-      .split("T")
-      .join(" ")
-      .split("Z")
-      .join(" ")
-      .split(".")
-      .slice(0, -1)
-      .join(" ");
-
-    formattedRes.updatedAt = formattedRes.updatedAt
-      .toISOString()
-      .split("T")
-      .join(" ")
-      .split("Z")
-      .join(" ")
-      .split(".")
-      .slice(0, -1)
-      .join(" ");
-
+    formattedRes.createdAt = formatDate(formattedRes.createdAt);
+    formattedRes.updatedAt = formatDate(formattedRes.updatedAt);
     res.status(201).json(formattedRes);
   }
 );

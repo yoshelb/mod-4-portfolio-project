@@ -14,7 +14,11 @@ const {
   Sequelize,
 } = require("../../db/models");
 
-const { findAllSpots, formatSpotResponse } = require("../../utils/helpers");
+const {
+  findAllSpots,
+  formatSpotResponse,
+  formatDate,
+} = require("../../utils/helpers");
 const express = require("express");
 
 const { check } = require("express-validator");
@@ -26,6 +30,8 @@ const {
 const review = require("../../db/models/review");
 
 const router = express.Router();
+
+// get all current users reviews
 
 router.get("/current", requireAuth, async (req, res, next) => {
   const userId = req.user.id;
@@ -84,25 +90,9 @@ router.get("/current", requireAuth, async (req, res, next) => {
 
     // FORMAT REVIEW COPY
     reviewCopy.stars = parseInt(reviewCopy.stars);
-    reviewCopy.createdAt = reviewCopy.createdAt
-      .toISOString()
-      .split("T")
-      .join(" ")
-      .split("Z")
-      .join(" ")
-      .split(".")
-      .slice(0, -1)
-      .join(" ");
+    reviewCopy.createdAt = formatDate(reviewCopy.createdAt);
 
-    reviewCopy.updatedAt = reviewCopy.updatedAt
-      .toISOString()
-      .split("T")
-      .join(" ")
-      .split("Z")
-      .join(" ")
-      .split(".")
-      .slice(0, -1)
-      .join(" ");
+    reviewCopy.updatedAt = formatDate(reviewCopy.updatedAt);
 
     const newReview = {
       ...reviewCopy,
@@ -111,7 +101,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
     };
     newBody.Reviews.push(newReview);
   }
-  // console.log("NEW BODY", newBody);
+
   res.json(newBody);
 });
 
