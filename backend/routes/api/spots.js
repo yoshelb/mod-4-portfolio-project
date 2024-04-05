@@ -52,9 +52,6 @@ router.get("/:spotId/reviews", async (req, res, next) => {
       {
         model: User,
         attributes: ["id", "firstName", "lastName"],
-        // on: {
-        //   id: Sequelize.col("Review.userId"),
-        // },
       },
     ],
   });
