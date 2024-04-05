@@ -85,7 +85,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
   res.json({ Bookings: bookingsCopy });
 });
 
-// EDIT A BOOKING
+// EDIT A BOOKING-------------------------------------------------------------------------------
 
 router.put(
   "/:bookingId",
@@ -203,5 +203,34 @@ router.put(
     res.json(resBooking);
   }
 );
+
+// DELETE A BOOKING _______________________________________________________________
+
+router.delete("/:bookingId", requireAuth, async (req, res, next) => {
+  const userId = req.user.id; //current user ID
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findByPk(bookingId);
+
+  if (!booking) {
+    res.status(404).json({
+      message: "Booking couldn't be found",
+    });
+  }
+
+  if (booking.dataValues.userId !== userId) {
+    res.status(403).json({
+      message: "Forbidden",
+    });
+  } else {
+    await booking.destroy({
+      message: "Successfully deleted",
+    });
+
+    res.json({
+      message: "Successfully deleted",
+    });
+  }
+});
 
 module.exports = router;
