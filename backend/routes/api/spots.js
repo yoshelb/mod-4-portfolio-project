@@ -350,15 +350,15 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
 
   const spot = await Spot.findByPk(spotId);
 
-  if (spot.ownerId !== ownerId) {
-    res.status(403).json({
-      message: "Forbidden",
-    });
-  }
-
   if (!spot) {
     res.status(404).json({
       message: "Spot couldn't be found",
+    });
+  }
+
+  if (spot.ownerId !== ownerId) {
+    res.status(403).json({
+      message: "Forbidden",
     });
   }
 
@@ -368,7 +368,6 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
       preview: true,
     },
   });
-  console.log(previewImage);
 
   if (previewImage && preview == true) {
     res
