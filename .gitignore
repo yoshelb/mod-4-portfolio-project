@@ -3,6 +3,4 @@ node_modules
 build
 .DS_Store
 *.db
-./backend/db
-package.json
-hello.txt
+backend/db
