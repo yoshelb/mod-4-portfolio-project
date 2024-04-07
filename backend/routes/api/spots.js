@@ -203,20 +203,20 @@ router.get("/", validateQueries, async (req, res, next) => {
   let whereObj = {};
   if (minLat || maxLat) {
     whereObj.lat = {};
-    if (minLat) whereObj.lat[Op.gt] = minLat;
-    if (maxLat) whereObj.lat[Op.lt] = maxLat;
+    if (minLat) whereObj.lat[Op.gt] = parseFloat(minLat);
+    if (maxLat) whereObj.lat[Op.lt] = parseFloat(maxLat);
   }
 
   if (minLng || maxLng) {
     whereObj.lng = {};
-    if (minLng) whereObj.lng[Op.gt] = minLng;
-    if (maxLng) whereObj.lng[Op.lt] = maxLng;
+    if (minLng) whereObj.lng[Op.gt] = parseFloat(minLng);
+    if (maxLng) whereObj.lng[Op.lt] = parseFloat(maxLng);
   }
 
   if (minPrice || maxPrice) {
     whereObj.price = {};
-    if (minPrice) whereObj.price[Op.gt] = minPrice;
-    if (maxPrice) whereObj.price[Op.lt] = maxPrice;
+    if (minPrice) whereObj.price[Op.gt] = parseFloat(minPrice);
+    if (maxPrice) whereObj.price[Op.lt] = parseFloat(maxPrice);
   }
 
   console.log("WHERE OBJ------------------", whereObj);
