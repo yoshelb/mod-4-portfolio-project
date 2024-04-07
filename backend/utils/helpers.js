@@ -66,7 +66,7 @@ const findAllSpotsWithPagination = async (
     include: [
       {
         model: Review,
-        attributes: [],
+        attributes: ["stars"],
       },
       {
         model: SpotImage,
@@ -75,27 +75,32 @@ const findAllSpotsWithPagination = async (
         limit: 1,
       },
     ],
-    attributes: {
-      include: [
-        [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
-      ],
-      exclude: [],
-    },
-    group: ["Spot.id"],
   });
 
   let newBody = [];
+
   spots.forEach((spot) => {
     let previewImage;
     if (spot.SpotImages.length > 0) {
       previewImage = spot.SpotImages[0].dataValues.url;
     }
 
+    const numReviews = spot.dataValues.Reviews.length;
+
+    const avgRating =
+      spot.dataValues.Reviews.reduce((acc, obj) => {
+        acc += obj.stars;
+        return acc;
+      }, 0) / numReviews;
+
+    console.log(avgRating);
+
     const spotWithExtraData = {
       ...spot.dataValues,
       previewImage,
+      avgRating,
     };
-
+    delete spotWithExtraData.Reviews;
     delete spotWithExtraData.SpotImages;
     const formattedBody = formatSpotResponse(spotWithExtraData);
 

@@ -189,12 +189,12 @@ router.get("/:spotId", async (req, res, next) => {
   res.json(spotRes);
 });
 
-// Get all SPOTS----------------------------------------------------------------
+// Get all SPOTS WITH QUERIES----------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 router.get("/", validateQueries, async (req, res, next) => {
   console.log("REQ QUERY", req.query);
 
-  const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
     req.query;
   if (!page) page = 1;
   if (!size) size = 20;
@@ -226,7 +226,9 @@ router.get("/", validateQueries, async (req, res, next) => {
     { limit: limit },
     { offset: offset }
   ); //helper func located in utils/helper
-  res.json(newBody);
+
+  let newBodyCopy = { Spots: newBody, page, size };
+  res.json(newBodyCopy);
 });
 
 // CREATE A BOOKING by spot id-----------------------------------------------
@@ -534,8 +536,6 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
 
   const spot = await Spot.findByPk(spotId);
 
-  console.log(spot);
-
   if (!spot) {
     res.status(404).json({
       message: "Spot couldn't be found",
@@ -543,7 +543,7 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
   }
 
   if (spot.ownerId !== ownerId) {
-    res.status(403).json({
+    return res.status(403).json({
       message: "Forbidden",
     });
   } else {
