@@ -26,6 +26,7 @@ const {
   handleValidationErrors,
   validateCreateSpot,
   validateCreateReview,
+  validateQueries,
 } = require("../../utils/validation");
 const review = require("../../db/models/review");
 

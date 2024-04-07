@@ -18,6 +18,7 @@ const {
   findAllSpots,
   formatSpotResponse,
   formatDate,
+  findAllSpotsWithPagination,
 } = require("../../utils/helpers");
 const express = require("express");
 
@@ -27,11 +28,14 @@ const {
   validateCreateSpot,
   validateCreateReview,
   validateCreateBooking,
+  validateQueries,
 } = require("../../utils/validation");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 
-// GET current User spot
+// GET current User spot-------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 router.get("/current", requireAuth, async (req, res, next) => {
   const ownerId = req.user.id;
   console.log(ownerId);
@@ -39,7 +43,8 @@ router.get("/current", requireAuth, async (req, res, next) => {
   res.json(newBody);
 });
 
-// GET REVIEWS by Spot ID
+// GET REVIEWS by Spot ID-------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 router.get("/:spotId/reviews", async (req, res, next) => {
   const spotId = req.params.spotId;
 
@@ -75,7 +80,8 @@ router.get("/:spotId/reviews", async (req, res, next) => {
   res.json({ Reviews: resReviews });
 });
 
-// GET BOOKING BY SPOT ID _____________________
+// GET BOOKING BY SPOT ID _____________________-------------------------------------------
+// ----------------------------------------------------------------------------------------------
 
 router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   const { spotId } = req.params;
@@ -128,7 +134,8 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   res.json({ Bookings: bookingInfo });
 });
 
-// GET Spot by ID
+// GET Spot by ID---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 
 router.get("/:spotId", async (req, res, next) => {
   const id = req.params.spotId;
@@ -182,13 +189,48 @@ router.get("/:spotId", async (req, res, next) => {
   res.json(spotRes);
 });
 
-// Get all routes
-router.get("/", async (req, res, next) => {
-  let newBody = await findAllSpots(); //helper func located in utils/helper
+// Get all SPOTS----------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
+router.get("/", validateQueries, async (req, res, next) => {
+  console.log("REQ QUERY", req.query);
+
+  const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+    req.query;
+  if (!page) page = 1;
+  if (!size) size = 20;
+  const limit = size;
+  const offset = size * (page - 1);
+  let whereObj = {};
+  if (minLat || maxLat) {
+    whereObj.lat = {};
+    if (minLat) whereObj.lat[Op.gt] = minLat;
+    if (maxLat) whereObj.lat[Op.lt] = maxLat;
+  }
+
+  if (minLng || maxLng) {
+    whereObj.lng = {};
+    if (minLng) whereObj.lng[Op.gt] = minLng;
+    if (maxLng) whereObj.lng[Op.lt] = maxLng;
+  }
+
+  if (minPrice || maxPrice) {
+    whereObj.price = {};
+    if (minPrice) whereObj.price[Op.gt] = minPrice;
+    if (maxPrice) whereObj.price[Op.lt] = maxPrice;
+  }
+
+  console.log("WHERE OBJ------------------", whereObj);
+
+  const newBody = await findAllSpotsWithPagination(
+    { where: whereObj },
+    { limit: limit },
+    { offset: offset }
+  ); //helper func located in utils/helper
   res.json(newBody);
 });
 
-// CREATE A BOOKING by spot id
+// CREATE A BOOKING by spot id-----------------------------------------------
+// ----------------------------------------------------------------------------------------------
 
 router.post(
   "/:spotId/bookings",
@@ -299,7 +341,8 @@ router.post(
   }
 );
 
-//Add an Image to a spot
+//Add an Image to a spot---------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   const ownerId = req.user.id; //current owner id
   const { spotId } = req.params;
@@ -347,7 +390,8 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   res.json(returnImage);
 });
 
-// CREATE new spot review by id
+// CREATE new spot review by id----------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 
 router.post(
   "/:spotId/reviews",
@@ -407,7 +451,8 @@ router.post(
   }
 );
 
-// CREATE a new spot
+// CREATE a new spot----------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   const ownerId = req.user.id;
   const { address, city, state, country, lat, lng, name, description, price } =
@@ -429,7 +474,8 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   res.status(201).json(formattedSpot);
 });
 
-// Edit a spot
+// Edit a spot--------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 router.put(
   "/:spotId",
   requireAuth,
@@ -480,7 +526,8 @@ router.put(
   }
 );
 
-// DELETE a Spot
+// DELETE a Spot---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 
 router.delete("/:spotId", requireAuth, async (req, res, next) => {
   const ownerId = req.user.id; //current owner id

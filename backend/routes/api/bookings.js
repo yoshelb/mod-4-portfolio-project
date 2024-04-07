@@ -27,6 +27,7 @@ const {
   validateCreateSpot,
   validateCreateReview,
   validateCreateBooking,
+  validateQueries,
 } = require("../../utils/validation");
 
 const router = express.Router();
@@ -57,7 +58,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
 
   for (let booking of bookings) {
     const bookingCopy = { ...booking.dataValues };
-    console.log("BOOKING COPY", bookingCopy);
+
     bookingCopy.startDate = formatDate(bookingCopy.startDate);
     bookingCopy.endDate = formatDate(bookingCopy.endDate);
     bookingCopy.createdAt = formatDate(bookingCopy.createdAt);

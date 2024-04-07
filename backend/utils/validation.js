@@ -1,5 +1,5 @@
 // backend/utils/validation.js
-const { validationResult } = require("express-validator");
+const { query, validationResult } = require("express-validator");
 const express = require("express");
 
 const { check } = require("express-validator");
@@ -75,9 +75,46 @@ const validateCreateBooking = [
   handleValidationErrors,
 ];
 
+const validateQueries = [
+  query("page")
+    .isInt({ min: 1 })
+    .optional()
+    .withMessage("Page must be greater than or equal to 1"),
+  query("size")
+    .isInt({ min: 1 })
+    .optional()
+    .withMessage("Size must be greater than or equal to 1"),
+  query("maxLat")
+    .isFloat({ min: -90, max: 90 })
+    .optional()
+    .withMessage("Maximum latitude is invalid"),
+  query("minLat")
+    .isFloat({ min: -90, max: 90 })
+    .optional()
+    .withMessage("Minimum latitude is invalid"),
+  query("minLng")
+    .isFloat({ min: -180, max: 180 })
+    .optional()
+    .withMessage("Maximum longitude is invalid"),
+  query("maxLng")
+    .isFloat({ min: -180, max: 180 })
+    .optional()
+    .withMessage("Maximum longitude is invalid"),
+  query("minPrice")
+    .isFloat({ min: 0 })
+    .optional()
+    .withMessage("Minimum price must be greater than or equal to 0"),
+  query("maxPrice")
+    .isFloat({ min: 0 })
+    .optional()
+    .withMessage("Maximum price must be greater than or equal to 0"),
+  handleValidationErrors,
+];
+
 module.exports = {
   handleValidationErrors,
   validateCreateSpot,
   validateCreateReview,
   validateCreateBooking,
+  validateQueries,
 };
