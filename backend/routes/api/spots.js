@@ -198,6 +198,8 @@ router.get("/", validateQueries, async (req, res, next) => {
     req.query;
   if (!page) page = 1;
   if (!size) size = 20;
+  page = parseInt(page);
+  size = parseInt(size);
   const limit = size;
   const offset = size * (page - 1);
   let whereObj = {};
@@ -222,6 +224,7 @@ router.get("/", validateQueries, async (req, res, next) => {
   console.log("WHERE OBJ------------------", whereObj);
 
   const newBody = await findAllSpotsWithPagination(
+    res,
     { where: whereObj },
     { limit: limit },
     { offset: offset }

@@ -55,6 +55,7 @@ const findAllSpots = async (whereObj = undefined) => {
 };
 
 const findAllSpotsWithPagination = async (
+  res,
   limit,
   offset,
   whereObj = undefined
@@ -76,7 +77,9 @@ const findAllSpotsWithPagination = async (
       },
     ],
   });
-
+  if (!spots) {
+    return;
+  }
   let newBody = [];
 
   spots.forEach((spot) => {
