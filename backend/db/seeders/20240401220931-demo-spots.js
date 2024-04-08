@@ -1,6 +1,6 @@
 "use strict";
-const { Spot } = require("../models");
 
+const { Spot, User } = require("../models");
 //
 let options = {};
 if (process.env.NODE_ENV === "production") {
@@ -11,11 +11,13 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
+      const u1 = await User.findOne({ where: { email: "demo@user.io" } });
+      const u2 = await User.findOne({ where: { email: "user1@user.io" } });
+      const u3 = await User.findOne({ where: { email: "user2@user.io" } });
       await Spot.bulkCreate(
         [
           {
-            id: 1,
-            ownerId: 1,
+            ownerId: u1.id,
             address: "123 Disney Lane",
             city: "San Francisco",
             state: "California",
@@ -27,8 +29,7 @@ module.exports = {
             price: 123,
           },
           {
-            id: 2,
-            ownerId: 2,
+            ownerId: u2.id,
             address: "405 Davis Ct",
             city: "San Francisco",
             state: "California",
@@ -40,8 +41,7 @@ module.exports = {
             price: 10.27,
           },
           {
-            id: 3,
-            ownerId: 3,
+            ownerId: u3.id,
             address: "55 Anchor Dr.",
             city: "San Francisco",
             state: "California",

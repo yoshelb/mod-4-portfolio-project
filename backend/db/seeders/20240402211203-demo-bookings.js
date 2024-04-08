@@ -1,5 +1,5 @@
 "use strict";
-const { Booking } = require("../models");
+const { Booking, User, Spot } = require("../models");
 
 //
 let options = {};
@@ -11,26 +11,36 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
+      const u1 = await User.findOne({ where: { email: "demo@user.io" } });
+      const u2 = await User.findOne({ where: { email: "user1@user.io" } });
+      const u3 = await User.findOne({ where: { email: "user2@user.io" } });
+
+      const spt1 = await Spot.findOne({
+        where: { address: "123 Disney Lane" },
+      });
+      const spt2 = await Spot.findOne({
+        where: { address: "405 Davis Ct" },
+      });
+      const spt3 = await Spot.findOne({
+        where: { address: "55 Anchor Dr." },
+      });
       await Booking.bulkCreate(
         [
           {
-            id: 1,
-            spotId: 1,
-            userId: 1,
+            spotId: spt1.id,
+            userId: u2.id,
             startDate: "2024-08-02",
             endDate: "2024-08-06",
           },
           {
-            id: 2,
-            spotId: 2,
-            userId: 2,
+            spotId: spt2.id,
+            userId: u3.id,
             startDate: "2024-08-02",
             endDate: "2024-08-06",
           },
           {
-            id: 3,
-            spotId: 3,
-            userId: 3,
+            spotId: spt3.id,
+            userId: u1.id,
             startDate: "2024-08-02",
             endDate: "2024-08-06",
           },
@@ -45,24 +55,34 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = "Bookings";
     const Op = Sequelize.Op;
+    const u1 = await User.findOne({ where: { email: "demo@user.io" } });
+    const u2 = await User.findOne({ where: { email: "user1@user.io" } });
+    const u3 = await User.findOne({ where: { email: "user2@user.io" } });
+
+    const spt1 = await Spot.findOne({
+      where: { address: "123 Disney Lane" },
+    });
+    const spt2 = await Spot.findOne({
+      where: { address: "405 Davis Ct" },
+    });
+    const spt3 = await Spot.findOne({
+      where: { address: "55 Anchor Dr." },
+    });
     return queryInterface.bulkDelete(
       options,
       {
         [Op.and]: [
           {
-            id: 1,
-            spotId: 1,
-            userId: 1,
+            spotId: spt1.id,
+            userId: u2.id,
           },
           {
-            id: 2,
-            spotId: 2,
-            userId: 2,
+            spotId: spt2.id,
+            userId: u3.id,
           },
           {
-            id: 3,
-            spotId: 3,
-            userId: 3,
+            spotId: spt3.id,
+            userId: u1.id,
           },
         ],
       },

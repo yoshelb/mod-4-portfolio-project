@@ -11,35 +11,39 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
+      const spt1 = await Spot.findOne({
+        where: { address: "123 Disney Lane" },
+      });
+      const spt2 = await Spot.findOne({
+        where: { address: "405 Davis Ct" },
+      });
+      const spt3 = await Spot.findOne({
+        where: { address: "55 Anchor Dr." },
+      });
       await SpotImage.bulkCreate(
         [
           {
-            id: 1,
-            spotId: 1,
+            spotId: spt1.id,
             url: "https://example.com/image1.jpg",
             preview: true,
           },
           {
-            id: 2,
-            spotId: 2,
+            spotId: spt2.id,
             url: "https://example.com/image2.jpg",
             preview: true,
           },
           {
-            id: 3,
-            spotId: 3,
+            spotId: spt3.id,
             url: "https://example.com/image3.jpg",
             preview: true,
           },
           {
-            id: 4,
-            spotId: 1,
+            spotId: spt1.id,
             url: "https://example.com/image4.jpg",
             preview: false,
           },
           {
-            id: 5,
-            spotId: 1,
+            spotId: spt2.id,
             url: "https://example.com/image5.jpg",
             preview: false,
           },
