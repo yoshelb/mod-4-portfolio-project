@@ -19,6 +19,7 @@ const {
   formatSpotResponse,
   formatDate,
   findAllSpotsWithPagination,
+  formatStartAndEndDate,
 } = require("../../utils/helpers");
 const express = require("express");
 
@@ -40,13 +41,17 @@ router.get("/current", requireAuth, async (req, res, next) => {
   const ownerId = req.user.id;
   console.log(ownerId);
   const newBody = await findAllSpots({ where: { ownerId: ownerId } }); //helper func located in utils/helper
-  res.json(newBody);
+  res.json({ Spots: newBody });
 });
 
 // GET REVIEWS by Spot ID-------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 router.get("/:spotId/reviews", async (req, res, next) => {
   const spotId = req.params.spotId;
+
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) return res.status(404).json({ message: "Spot couldn't be found" });
 
   const reviews = await Review.findAll({
     where: { spotId: spotId },
@@ -61,12 +66,6 @@ router.get("/:spotId/reviews", async (req, res, next) => {
       },
     ],
   });
-
-  console.log(reviews);
-
-  if (reviews.length <= 0) {
-    res.status(404).json({ message: "Spot couldn't be found" });
-  }
 
   const reviewsCopy = [...reviews];
   const resReviews = [];
@@ -101,7 +100,7 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   });
 
   if (!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
     });
   }
@@ -112,8 +111,12 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
     for (let booking of spotCopy) {
       booking.dataValues.updatedAt = formatDate(booking.dataValues.updatedAt);
       booking.dataValues.createdAt = formatDate(booking.dataValues.createdAt);
-      booking.dataValues.startDate = formatDate(booking.dataValues.startDate);
-      booking.dataValues.endDate = formatDate(booking.dataValues.endDate);
+      booking.dataValues.startDate = formatStartAndEndDate(
+        booking.dataValues.startDate
+      );
+      booking.dataValues.endDate = formatStartAndEndDate(
+        booking.dataValues.endDate
+      );
     }
     bookingInfo.push(spotCopy);
   } else {
@@ -125,8 +128,12 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
       delete booking.dataValues.createdAt;
       delete booking.dataValues.updatedAt;
       delete booking.dataValues.userId;
-      booking.dataValues.startDate = formatDate(booking.dataValues.startDate);
-      booking.dataValues.endDate = formatDate(booking.dataValues.endDate);
+      booking.dataValues.startDate = formatStartAndEndDate(
+        booking.dataValues.startDate
+      );
+      booking.dataValues.endDate = formatStartAndEndDate(
+        booking.dataValues.endDate
+      );
     }
     bookingInfo.push(spotCopy);
   }
@@ -165,7 +172,7 @@ router.get("/:spotId", async (req, res, next) => {
   });
 
   if (!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
     });
   }
@@ -224,7 +231,6 @@ router.get("/", validateQueries, async (req, res, next) => {
   console.log("WHERE OBJ------------------", whereObj);
 
   const newBody = await findAllSpotsWithPagination(
-    res,
     { where: whereObj },
     { limit: limit },
     { offset: offset }
@@ -254,7 +260,7 @@ router.post(
       errors.push({ startDate: error.message });
     }
 
-    if (parsedEndDate < parsedStartDate) {
+    if (parsedEndDate <= parsedStartDate) {
       const error = new Error("endDate cannot be on or before startDate");
       errors.push({ endDate: error.message });
     }
@@ -274,13 +280,13 @@ router.post(
     });
 
     if (!spot) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Spot couldn't be found",
       });
     }
 
     if (spot.dataValues.ownerId === userId) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "Forbidden",
       });
     }
@@ -292,10 +298,10 @@ router.post(
       const parsedBookingStart = new Date(bookingCopy.startDate).getTime();
       const parsedBookingEnd = new Date(bookingCopy.endDate).getTime();
 
-      console.log(
-        "PARSED BOOKING AND PARSED START DATE",
-        parsedBookingStart == parsedStartDate
-      );
+      // console.log(
+      //   "PARSED BOOKING AND PARSED START DATE",
+      //   parsedBookingStart == parsedStartDate
+      // );
       if (
         parsedBookingStart == parsedStartDate ||
         parsedBookingEnd == parsedStartDate ||
@@ -323,6 +329,25 @@ router.post(
           bookingErrors.endDate = error.message;
         }
       }
+
+      // IF Booking start and end fall between req start and end
+      if (
+        parsedBookingStart >= parsedStartDate &&
+        parsedBookingEnd <= parsedEndDate
+      ) {
+        if (!bookingErrors.startDate) {
+          const error = new Error(
+            "Start date conflicts with an existing booking"
+          );
+          bookingErrors.startDate = error.message;
+        }
+        if (!bookingErrors.endDate) {
+          const error = new Error(
+            "End date conflicts with an existing booking"
+          );
+          bookingErrors.endDate = error.message;
+        }
+      }
     }
 
     if (Object.keys(bookingErrors).length > 0) {
@@ -338,8 +363,8 @@ router.post(
       endDate: endDate,
     });
     const newBookingCopy = { ...newBooking.dataValues };
-    newBookingCopy.startDate = formatDate(newBookingCopy.startDate);
-    newBookingCopy.endDate = formatDate(newBookingCopy.endDate);
+    newBookingCopy.startDate = formatStartAndEndDate(newBookingCopy.startDate);
+    newBookingCopy.endDate = formatStartAndEndDate(newBookingCopy.endDate);
     newBookingCopy.createdAt = formatDate(newBookingCopy.createdAt);
     newBookingCopy.updatedAt = formatDate(newBookingCopy.updatedAt);
     res.json(newBookingCopy);
@@ -356,13 +381,13 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   const spot = await Spot.findByPk(spotId);
 
   if (!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
     });
   }
 
   if (spot.ownerId !== ownerId) {
-    res.status(403).json({
+    return res.status(403).json({
       message: "Forbidden",
     });
   }
@@ -451,7 +476,7 @@ router.post(
     const formattedRes = { ...reviewWithId.dataValues };
     formattedRes.createdAt = formatDate(formattedRes.createdAt);
     formattedRes.updatedAt = formatDate(formattedRes.updatedAt);
-    res.status(201).json(formattedRes);
+    return res.status(201).json(formattedRes);
   }
 );
 
@@ -475,7 +500,7 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   });
   const formattedSpot = formatSpotResponse({ ...newSpot.dataValues });
 
-  res.status(201).json(formattedSpot);
+  return res.status(201).json(formattedSpot);
 });
 
 // Edit a spot--------------------------------------------------------------------------
@@ -501,19 +526,18 @@ router.put(
     const spot = await Spot.findByPk(spotId);
 
     if (!spot) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Spot couldn't be found",
       });
     }
 
     if (spot.ownerId !== ownerId) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "Forbidden",
       });
     }
 
     await spot.update({
-      ownerId: ownerId,
       address: address,
       city: city,
       state: state,
@@ -540,7 +564,7 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
   const spot = await Spot.findByPk(spotId);
 
   if (!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
     });
   }
@@ -550,9 +574,7 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
       message: "Forbidden",
     });
   } else {
-    await spot.destroy({
-      message: "Successfully deleted",
-    });
+    await spot.destroy();
 
     res.json({
       message: "Successfully deleted",

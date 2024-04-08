@@ -32,7 +32,7 @@ router.delete("/:imageId", requireAuth, async (req, res, next) => {
   const image = await SpotImage.findByPk(imageId);
 
   if (!image) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
     });
   }
@@ -40,7 +40,7 @@ router.delete("/:imageId", requireAuth, async (req, res, next) => {
   const spot = await Spot.findByPk(image.dataValues.spotId);
 
   if (spot.ownerId !== ownerId) {
-    res.status(403).json({
+    return res.status(403).json({
       message: "Forbidden",
     });
   } else {
@@ -48,7 +48,7 @@ router.delete("/:imageId", requireAuth, async (req, res, next) => {
       message: "Successfully deleted",
     });
   }
-  res.json({
+  return res.json({
     message: "Successfully deleted",
   });
 });

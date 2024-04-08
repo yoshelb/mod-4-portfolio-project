@@ -35,14 +35,14 @@ const findAllSpots = async (whereObj = undefined) => {
 
   let newBody = [];
   spots.forEach((spot) => {
-    let previewImage;
+    let previewImage = null;
     if (spot.SpotImages.length > 0) {
       previewImage = spot.SpotImages[0].dataValues.url;
     }
 
     const spotWithExtraData = {
       ...spot.dataValues,
-      previewImage,
+      previewImage: previewImage,
     };
 
     delete spotWithExtraData.SpotImages;
@@ -55,62 +55,67 @@ const findAllSpots = async (whereObj = undefined) => {
 };
 
 const findAllSpotsWithPagination = async (
-  res,
   limit,
   offset,
   whereObj = undefined
 ) => {
-  const spots = await Spot.findAll({
-    ...limit,
-    ...offset,
-    ...whereObj,
-    include: [
-      {
-        model: Review,
-        attributes: ["stars"],
-      },
-      {
-        model: SpotImage,
-        attributes: ["url"],
-        where: { preview: true },
-        limit: 1,
-      },
-    ],
-  });
-  if (!spots) {
-    return;
-  }
-  let newBody = [];
+  try {
+    const spots = await Spot.findAll({
+      ...limit,
+      ...offset,
+      ...whereObj,
+      include: [
+        {
+          model: Review,
+          attributes: ["stars"],
+        },
+        {
+          model: SpotImage,
+          attributes: ["url"],
+          where: { preview: true },
+          limit: 1,
+        },
+      ],
+    });
 
-  spots.forEach((spot) => {
-    let previewImage;
-    if (spot.SpotImages.length > 0) {
-      previewImage = spot.SpotImages[0].dataValues.url;
+    if (spots.length === 0) {
+      return [];
     }
+    let newBody = [];
 
-    const numReviews = spot.dataValues.Reviews.length;
+    spots.forEach((spot) => {
+      let previewImage = null;
+      if (spot.SpotImages.length > 0) {
+        previewImage = spot.SpotImages[0].dataValues.url;
+      }
 
-    const avgRating =
-      spot.dataValues.Reviews.reduce((acc, obj) => {
-        acc += obj.stars;
-        return acc;
-      }, 0) / numReviews;
+      const numReviews = spot.dataValues.Reviews.length;
 
-    console.log(avgRating);
+      const avgRating =
+        spot.dataValues.Reviews.reduce((acc, obj) => {
+          acc += obj.stars;
+          return acc;
+        }, 0) / numReviews;
 
-    const spotWithExtraData = {
-      ...spot.dataValues,
-      previewImage,
-      avgRating,
-    };
-    delete spotWithExtraData.Reviews;
-    delete spotWithExtraData.SpotImages;
-    const formattedBody = formatSpotResponse(spotWithExtraData);
+      console.log(avgRating);
 
-    newBody.push(formattedBody);
-  });
+      const spotWithExtraData = {
+        ...spot.dataValues,
+        previewImage: previewImage,
+        avgRating: avgRating,
+      };
+      delete spotWithExtraData.Reviews;
+      delete spotWithExtraData.SpotImages;
+      const formattedBody = formatSpotResponse(spotWithExtraData);
 
-  return newBody;
+      newBody.push(formattedBody);
+    });
+
+    return newBody;
+  } catch (error) {
+    console.error("Error fetching spots:", error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
 };
 
 function formatSpotResponse(spot) {
@@ -126,6 +131,21 @@ function formatSpotResponse(spot) {
     spot.avgRating = parseFloat(spot.avgRating).toFixed(2);
   }
   return spot;
+}
+
+function formatStartAndEndDate(dateString) {
+  return dateString
+    .toISOString()
+    .split("T")
+    .join(" ")
+    .split("Z")
+    .join(" ")
+    .split(".")
+    .slice(0, -1)
+    .join(" ")
+    .split(" ")
+    .slice(0, -1)
+    .join();
 }
 
 function formatDate(dateString) {
@@ -145,4 +165,5 @@ module.exports = {
   formatSpotResponse,
   formatDate,
   findAllSpotsWithPagination,
+  formatStartAndEndDate,
 };
