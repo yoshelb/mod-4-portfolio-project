@@ -146,15 +146,14 @@ router.put(
     const spot = await Spot.findByPk(bookingToUpdate.dataValues.spotId, {
       include: {
         model: Booking,
-        attributes: ["startDate", "endDate"],
+        attributes: ["startDate", "endDate", "id"],
       },
     });
     const bookingErrors = {};
-    console.log("BOOKINGID PARAMS", bookingId);
-    console.log("BOOKING---------", spot.dataValues.Bookings);
+
     for (let booking of spot.dataValues.Bookings) {
       // /dont check against the current booking
-      if (booking.dataValues.id !== bookingId) {
+      if (parseInt(booking.dataValues.id) !== parseInt(bookingId)) {
         const bookingCopy = { ...booking.dataValues };
         const parsedBookingStart = new Date(bookingCopy.startDate).getTime();
         const parsedBookingEnd = new Date(bookingCopy.endDate).getTime();
