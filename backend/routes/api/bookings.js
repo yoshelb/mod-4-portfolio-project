@@ -54,7 +54,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
       },
     },
   });
-  //   console.log(bookings);
+
   const bookingsCopy = [];
 
   for (let booking of bookings) {

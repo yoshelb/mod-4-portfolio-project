@@ -60,8 +60,6 @@ const findAllSpotsWithPagination = async (
   whereObj = undefined
 ) => {
   try {
-    console.log("FIND ALL -inside---------");
-    console.log("LIMIT:", limit, "OFFSET", offset, "WHEREOBJ: ", whereObj);
     const spots = await Spot.findAll({
       limit: limit,
       offset: offset,
@@ -78,7 +76,7 @@ const findAllSpotsWithPagination = async (
         },
       ],
     });
-    console.log("AFTER FIND ALL");
+
     if (spots.length === 0) {
       return [];
     }
@@ -97,8 +95,6 @@ const findAllSpotsWithPagination = async (
           acc += obj.stars;
           return acc;
         }, 0) / numReviews;
-
-      console.log(avgRating);
 
       const spotWithExtraData = {
         ...spot.dataValues,

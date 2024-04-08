@@ -66,7 +66,6 @@ const validateCreateBooking = [
     .isAfter(today)
     .withMessage("startDate cannot be in the past"),
   check("endDate").custom((endDate, req) => {
-    console.log(req);
     const { startDate } = req.transformedData;
     if (endDate <= startDate) {
       throw new Error("endDate cannot be on or before startDate");

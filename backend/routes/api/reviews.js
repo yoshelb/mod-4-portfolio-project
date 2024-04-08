@@ -66,7 +66,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
       where: { reviewId: reviewCopy.id },
       attributes: ["id", "url"],
     });
-    console.log("REVIEW IMAGE", revImages);
+
     const spot = await Spot.findByPk(reviewCopy.spotId, {
       attributes: {
         exclude: ["createdAt", "updatedAt", "description"],

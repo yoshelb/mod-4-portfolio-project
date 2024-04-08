@@ -39,7 +39,7 @@ const router = express.Router();
 // ----------------------------------------------------------------------------------------------
 router.get("/current", requireAuth, async (req, res, next) => {
   const ownerId = req.user.id;
-  console.log(ownerId);
+
   const newBody = await findAllSpots({ where: { ownerId: ownerId } }); //helper func located in utils/helper
   res.json({ Spots: newBody });
 });
@@ -137,7 +137,7 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
     }
     bookingInfo.push(spotCopy);
   }
-  console.log(spot);
+
   res.json({ Bookings: bookingInfo });
 });
 
@@ -185,8 +185,6 @@ router.get("/:spotId", async (req, res, next) => {
       return acc;
     }, 0) / numReviews;
 
-  console.log(avgRating);
-
   let spotCopy = { ...spot.dataValues, numReviews, avgRating };
 
   delete spotCopy.Reviews;
@@ -199,8 +197,6 @@ router.get("/:spotId", async (req, res, next) => {
 // Get all SPOTS WITH QUERIES----------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 router.get("/", validateQueries, async (req, res, next) => {
-  console.log("REQ QUERY", req.query);
-
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
     req.query;
   if (!page) page = 1;
@@ -227,8 +223,6 @@ router.get("/", validateQueries, async (req, res, next) => {
     if (minPrice) whereObj.price[Op.gt] = parseFloat(minPrice);
     if (maxPrice) whereObj.price[Op.lt] = parseFloat(maxPrice);
   }
-
-  console.log("WHERE OBJ------------------", whereObj);
 
   const newBody = await findAllSpotsWithPagination(limit, offset, whereObj); //helper func located in utils/helper
 
@@ -266,7 +260,7 @@ router.post(
     }
 
     const userId = req.user.id;
-    console.log(userId);
+
     const { spotId } = req.params;
     const spot = await Spot.findByPk(spotId, {
       include: {
@@ -294,10 +288,6 @@ router.post(
       const parsedBookingStart = new Date(bookingCopy.startDate).getTime();
       const parsedBookingEnd = new Date(bookingCopy.endDate).getTime();
 
-      // console.log(
-      //   "PARSED BOOKING AND PARSED START DATE",
-      //   parsedBookingStart == parsedStartDate
-      // );
       if (
         parsedBookingStart == parsedStartDate ||
         parsedBookingEnd == parsedStartDate ||
