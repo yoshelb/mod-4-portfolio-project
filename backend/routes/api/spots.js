@@ -230,11 +230,7 @@ router.get("/", validateQueries, async (req, res, next) => {
 
   console.log("WHERE OBJ------------------", whereObj);
 
-  const newBody = await findAllSpotsWithPagination(
-    { where: whereObj },
-    { limit: limit },
-    { offset: offset }
-  ); //helper func located in utils/helper
+  const newBody = await findAllSpotsWithPagination(limit, offset, whereObj); //helper func located in utils/helper
 
   let newBodyCopy = { Spots: newBody, page, size };
   res.json(newBodyCopy);

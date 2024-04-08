@@ -60,10 +60,12 @@ const findAllSpotsWithPagination = async (
   whereObj = undefined
 ) => {
   try {
+    console.log("FIND ALL -inside---------");
+    console.log("LIMIT:", limit, "OFFSET", offset, "WHEREOBJ: ", whereObj);
     const spots = await Spot.findAll({
-      ...limit,
-      ...offset,
-      ...whereObj,
+      limit: limit,
+      offset: offset,
+      where: whereObj,
       include: [
         {
           model: Review,
@@ -73,11 +75,10 @@ const findAllSpotsWithPagination = async (
           model: SpotImage,
           attributes: ["url"],
           where: { preview: true },
-          limit: 1,
         },
       ],
     });
-
+    console.log("AFTER FIND ALL");
     if (spots.length === 0) {
       return [];
     }
