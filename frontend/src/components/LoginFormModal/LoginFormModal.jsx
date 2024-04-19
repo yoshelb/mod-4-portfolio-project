@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import * as sessionActions from '../../store/session';
-import { useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import './LoginForm.css';
+import { useState } from "react";
+import * as sessionActions from "../../store/session";
+import { useDispatch } from "react-redux";
+import { useModal } from "../../context/Modal";
+import "./LoginForm.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -15,6 +15,24 @@ function LoginFormModal() {
     e.preventDefault();
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  };
+
+  const handleDefaultUser = (e) => {
+    e.preventDefault();
+    setErrors({});
+    return dispatch(
+      sessionActions.login({
+        credential: "user2@user.io",
+        password: "password3",
+      })
+    )
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
@@ -47,8 +65,10 @@ function LoginFormModal() {
           />
         </label>
         {errors.credential && <p>{errors.credential}</p>}
+
         <button type="submit">Log In</button>
       </form>
+      <button onClick={(e) => handleDefaultUser(e)}>Login Default User</button>
     </>
   );
 }
