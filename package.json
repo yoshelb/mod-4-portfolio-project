@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/yoshelb/mod-4-portfolio-project/issues"
   },
-  "homepage": "https://github.com/yoshelb/mod-4-portfolio-project#readme"
+  "homepage": "https://github.com/yoshelb/mod-4-portfolio-project#readme",
+  "dependencies": {
+    "react-icons": "^5.1.0"
+  }
 }

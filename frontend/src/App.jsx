@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Outlet, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Outlet, createBrowserRouter, RouterProvider } from "react-router-dom";
 // import LoginFormPage from './components/LoginFormPage';
 // import SignupFormPage from './components/SignupFormPage';
-import Navigation from './components/Navigation/Navigation-bonus';
-import * as sessionActions from './store/session';
-import { Modal } from './context/Modal';
+import Navigation from "./components/Navigation/Navigation-bonus";
+import * as sessionActions from "./store/session";
+import { Modal } from "./context/Modal";
+import SpotsShow from "./components/SpotsShow";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -13,13 +14,13 @@ function Layout() {
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => {
-      setIsLoaded(true)
+      setIsLoaded(true);
     });
   }, [dispatch]);
 
   return (
     <>
-      <Modal/>
+      <Modal />
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
     </>
@@ -31,8 +32,13 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: '/',
-        element: <h1>Welcome!</h1>
+        path: "/",
+        element: (
+          <>
+            <h1>Front Page</h1>
+            <SpotsShow />
+          </>
+        ),
       },
       // {
       //   path: 'login',
@@ -42,8 +48,8 @@ const router = createBrowserRouter([
       //   path: 'signup',
       //   element: <SignupFormPage />
       // }
-    ]
-  }
+    ],
+  },
 ]);
 
 function App() {
