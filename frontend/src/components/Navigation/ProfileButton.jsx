@@ -4,6 +4,7 @@ import * as sessionActions from "../../store/session";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 function ProfileButton({ user }) {
+  console.log("SHOW MENU", showMenu);
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
@@ -38,7 +39,7 @@ function ProfileButton({ user }) {
     <div className="profile-menu">
       <button onClick={toggleMenu}>
         <div className="button-imgs">
-          <RxHamburgerMenu />
+          {showMenu === true ? null : <RxHamburgerMenu size={50} />}
           <div
             className="profile-menu-icon"
             style={{ backgroundImage: `url('/images/ant-head-icon.png')` }}

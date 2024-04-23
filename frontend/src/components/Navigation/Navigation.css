@@ -1,9 +1,32 @@
 /* .profile-dropdown {
 } */
 .profile-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #c1c8d1;
+  background-color: #ebf0f4;
+  border-radius: 5%;
+  padding: 10px;
+}
+.profile-menu > button {
   position: relative;
   display: flex;
   flex-direction: column;
+  background-color: #ebf0f4;
+  border: none;
+}
+.profile-menu > ul {
+  margin: 0; /* Removes default margin */
+  padding: 0; /* Removes default padding */
+  list-style: none;
+  margin-top: 12px;
+}
+
+.profile-menu > ul > li {
+  margin: 0 0 12px 0; /* Removes default margin */
+  padding: 0; /* Removes default padding */
+  list-style: none;
 }
 
 .hidden {
@@ -24,10 +47,21 @@
   box-sizing: border-box;
 }
 
+.button-imgs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .profile-menu-icon {
   width: 50px;
   height: 50px;
-
   background-size: cover;
-  border-radius: 100%;
+  border-radius: 50%;
+}
+
+.logout-button {
+  background-color: white;
+  border: 1px solid #c1c8d1;
+  border-radius: 5%;
 }

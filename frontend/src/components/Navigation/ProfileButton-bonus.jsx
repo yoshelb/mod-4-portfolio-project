@@ -14,6 +14,7 @@ function ProfileButton({ user }) {
   const toggleMenu = (e) => {
     e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
     setShowMenu(!showMenu);
+    console.log("SHOW MENU", showMenu);
   };
 
   useEffect(() => {
@@ -45,7 +46,7 @@ function ProfileButton({ user }) {
       <button onClick={toggleMenu}>
         {/* <i className="fas fa-user-circle" /> */}
         <div className="button-imgs">
-          <RxHamburgerMenu />
+          {showMenu === true ? null : <RxHamburgerMenu size={50} />}
           <div
             className="profile-menu-icon"
             style={{
