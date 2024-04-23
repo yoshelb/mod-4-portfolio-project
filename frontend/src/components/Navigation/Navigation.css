@@ -15,6 +15,7 @@
   flex-direction: column;
   background-color: #ebf0f4;
   border: none;
+  cursor: pointer;
 }
 .profile-menu > ul {
   margin: 0; /* Removes default margin */
@@ -64,4 +65,7 @@
   background-color: white;
   border: 1px solid #c1c8d1;
   border-radius: 5%;
+}
+.logout-button:hover {
+  cursor: pointer;
 }
