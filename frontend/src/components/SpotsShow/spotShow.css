@@ -1,0 +1,38 @@
+.spots-show-gallery {
+  display: flex;
+  column-gap: 40px;
+  row-gap: 60px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.spot-card-img {
+  width: 300px;
+  height: 300px;
+  background-size: cover;
+  border-radius: 10%;
+}
+/* .underSpotImg {
+  display: flex;
+  flex-direction: column;
+} */
+
+.underSpotImg-top {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 0px 0;
+  align-items: center;
+}
+
+.spot-card-address {
+  margin: 0;
+  text-align: center;
+}
+.ratingAndStar {
+  display: flex;
+  column-gap: 0px;
+  align-items: center;
+}
+.spot-card-price {
+  margin: 0;
+}

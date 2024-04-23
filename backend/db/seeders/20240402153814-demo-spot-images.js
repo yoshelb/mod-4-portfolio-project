@@ -12,40 +12,79 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     try {
       const spt1 = await Spot.findOne({
-        where: { address: "123 Disney Lane" },
+        where: { address: "1 Barkwood Court" },
       });
       const spt2 = await Spot.findOne({
-        where: { address: "405 Davis Ct" },
+        where: { address: "3 Chocolate Drive" },
       });
       const spt3 = await Spot.findOne({
-        where: { address: "55 Anchor Dr." },
+        where: { address: "2 Crumb Avenue" },
       });
+      const spt4 = await Spot.findOne({
+        where: { address: "4 Pebble Path" },
+      });
+      const spt5 = await Spot.findOne({
+        where: { address: "5 Dewdrop Blvd" },
+      });
+      const spt6 = await Spot.findOne({
+        where: { address: "6 Underground Way" },
+      });
+      const spt7 = await Spot.findOne({
+        where: { address: "7 Trashcan Road" },
+      });
+      const spt8 = await Spot.findOne({
+        where: { address: "8 Silk Street" },
+      });
+      const spt9 = await Spot.findOne({
+        where: { address: "9 Leaf Lane" },
+      });
+
       await SpotImage.bulkCreate(
         [
           {
             spotId: spt1.id,
-            url: "https://example.com/image1.jpg",
+            url: "./images/spot-seed-images/stump-bnb.png",
             preview: true,
           },
           {
             spotId: spt2.id,
-            url: "https://example.com/image2.jpg",
+            url: "./images/spot-seed-images/candy-bnb.png",
             preview: true,
           },
           {
             spotId: spt3.id,
-            url: "https://example.com/image3.jpg",
+            url: "./images/spot-seed-images/sandwhich-bnb.png",
             preview: true,
           },
           {
-            spotId: spt1.id,
-            url: "https://example.com/image4.jpg",
-            preview: false,
+            spotId: spt4.id,
+            url: "./images/spot-seed-images/pebble-bnb.png",
+            preview: true,
           },
           {
-            spotId: spt2.id,
-            url: "https://example.com/image5.jpg",
-            preview: false,
+            spotId: spt5.id,
+            url: "./images/spot-seed-images/dewdrop-bnb.png",
+            preview: true,
+          },
+          {
+            spotId: spt6.id,
+            url: "./images/spot-seed-images/underground-bnb.png",
+            preview: true,
+          },
+          {
+            spotId: spt7.id,
+            url: "./images/spot-seed-images/garbage-bnb.png",
+            preview: true,
+          },
+          {
+            spotId: spt8.id,
+            url: "./images/spot-seed-images/sandwhich-bnb.png",
+            preview: true,
+          },
+          {
+            spotId: spt9.id,
+            url: "./images/spot-seed-images/sandwhich-bnb.png",
+            preview: true,
           },
         ],
         { validate: true }
@@ -63,11 +102,12 @@ module.exports = {
       {
         url: {
           [Op.in]: [
-            "https://example.com/image1.jpg",
-            "https://example.com/image2.jpg",
-            "https://example.com/image3.jpg",
-            "https://example.com/image4.jpg",
-            "https://example.com/image5.jpg",
+            "./images/spot-seed-images/stump-bnb.png",
+            "./images/spot-seed-images/candy-bnb.png",
+            "./images/spot-seed-images/sandwhich-bnb.png",
+            "./images/spot-seed-images/pebble-bnb.png",
+            "./images/spot-seed-images/dewdrop-bnb.png",
+            "./images/spot-seed-images/garbage-bnb.png",
           ],
         },
       },

@@ -11,24 +11,24 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
-      const u1 = await User.findOne({ where: { email: "demo@user.io" } });
-      const u2 = await User.findOne({ where: { email: "user1@user.io" } });
-      const u3 = await User.findOne({ where: { email: "user2@user.io" } });
+      const u5 = await User.findOne({ where: { email: "honeydew@user.io" } });
+      const u4 = await User.findOne({ where: { email: "sixlegs@user.io" } });
+      const u3 = await User.findOne({ where: { email: "colony@user.io" } });
 
       const spt1 = await Spot.findOne({
-        where: { address: "123 Disney Lane" },
+        where: { address: "1 Barkwood Court" },
       });
       const spt2 = await Spot.findOne({
-        where: { address: "405 Davis Ct" },
+        where: { address: "2 Crumb Avenue" },
       });
       const spt3 = await Spot.findOne({
-        where: { address: "55 Anchor Dr." },
+        where: { address: "3 Chocolate Drive" },
       });
       await Booking.bulkCreate(
         [
           {
             spotId: spt1.id,
-            userId: u2.id,
+            userId: u4.id,
             startDate: "2024-08-02",
             endDate: "2024-08-06",
           },
@@ -40,7 +40,7 @@ module.exports = {
           },
           {
             spotId: spt3.id,
-            userId: u1.id,
+            userId: u5.id,
             startDate: "2024-08-02",
             endDate: "2024-08-06",
           },
@@ -55,18 +55,18 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = "Bookings";
     const Op = Sequelize.Op;
-    const u1 = await User.findOne({ where: { email: "demo@user.io" } });
-    const u2 = await User.findOne({ where: { email: "user1@user.io" } });
-    const u3 = await User.findOne({ where: { email: "user2@user.io" } });
+    const u5 = await User.findOne({ where: { email: "honeydew@user.io" } });
+    const u4 = await User.findOne({ where: { email: "sixlegs@user.io" } });
+    const u3 = await User.findOne({ where: { email: "colony@user.io" } });
 
     const spt1 = await Spot.findOne({
-      where: { address: "123 Disney Lane" },
+      where: { address: "1 Barkwood Court" },
     });
     const spt2 = await Spot.findOne({
-      where: { address: "405 Davis Ct" },
+      where: { address: "2 Crumb Avenue" },
     });
     const spt3 = await Spot.findOne({
-      where: { address: "55 Anchor Dr." },
+      where: { address: "3 Chocolate Drive" },
     });
     return queryInterface.bulkDelete(
       options,
@@ -74,7 +74,7 @@ module.exports = {
         [Op.and]: [
           {
             spotId: spt1.id,
-            userId: u2.id,
+            userId: u4.id,
           },
           {
             spotId: spt2.id,
@@ -82,7 +82,7 @@ module.exports = {
           },
           {
             spotId: spt3.id,
-            userId: u1.id,
+            userId: u5.id,
           },
         ],
       },

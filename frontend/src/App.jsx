@@ -35,8 +35,9 @@ const router = createBrowserRouter([
         path: "/",
         element: (
           <>
-            <h1>Front Page</h1>
-            <SpotsShow />
+            <main>
+              <SpotsShow />
+            </main>
           </>
         ),
       },

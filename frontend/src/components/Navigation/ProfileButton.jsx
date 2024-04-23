@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import * as sessionActions from '../../store/session';
+import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import * as sessionActions from "../../store/session";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -21,9 +22,9 @@ function ProfileButton({ user }) {
       }
     };
 
-    document.addEventListener('click', closeMenu);
+    document.addEventListener("click", closeMenu);
 
-    return () => document.removeEventListener('click', closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
   const logout = (e) => {
@@ -34,21 +35,28 @@ function ProfileButton({ user }) {
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
-    <>
+    <div className="profile-menu">
       <button onClick={toggleMenu}>
-        <i className="fas fa-user-circle" />
+        <div className="button-imgs">
+          <RxHamburgerMenu />
+          <div
+            className="profile-menu-icon"
+            style={{ backgroundImage: `url('/images/ant-head-icon.png')` }}
+          ></div>
+        </div>
       </button>
       <ul className={ulClassName} ref={ulRef}>
         <li>{user.username}</li>
-        <li>{user.firstName} {user.lastName}</li>
+        <li>
+          {user.firstName} {user.lastName}
+        </li>
         <li>{user.email}</li>
         <li>
           <button onClick={logout}>Log Out</button>
         </li>
       </ul>
-    </>
+    </div>
   );
 }
 
 export default ProfileButton;
-

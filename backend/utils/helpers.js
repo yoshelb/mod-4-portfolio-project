@@ -90,11 +90,18 @@ const findAllSpotsWithPagination = async (
 
       const numReviews = spot.dataValues.Reviews.length;
 
-      const avgRating =
+      let avgRating =
         spot.dataValues.Reviews.reduce((acc, obj) => {
           acc += obj.stars;
           return acc;
         }, 0) / numReviews;
+
+      avgRating = avgRating.toFixed(2);
+
+      avgRatingArr = avgRating.toString().split(".");
+      if (avgRatingArr[1] == 0) {
+        avgRating = Math.round(avgRating);
+      }
 
       const spotWithExtraData = {
         ...spot.dataValues,

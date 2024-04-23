@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import * as sessionActions from '../../store/session';
-import OpenModalMenuItem from './OpenModalMenuItem';
-import LoginFormModal from '../LoginFormModal';
-import SignupFormModal from '../SignupFormModal';
+import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import * as sessionActions from "../../store/session";
+import OpenModalMenuItem from "./OpenModalMenuItem";
+import LoginFormModal from "../LoginFormModal";
+import SignupFormModal from "../SignupFormModal";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -24,9 +25,9 @@ function ProfileButton({ user }) {
       }
     };
 
-    document.addEventListener('click', closeMenu);
+    document.addEventListener("click", closeMenu);
 
-    return () => document.removeEventListener('click', closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
   const closeMenu = () => setShowMenu(false);
@@ -42,13 +43,24 @@ function ProfileButton({ user }) {
   return (
     <>
       <button onClick={toggleMenu}>
-        <i className="fas fa-user-circle" />
+        {/* <i className="fas fa-user-circle" /> */}
+        <div className="button-imgs">
+          <RxHamburgerMenu />
+          <div
+            className="profile-menu-icon"
+            style={{
+              backgroundImage: `url('/images/ant-head-icon.png')`,
+            }}
+          ></div>
+        </div>
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
             <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+            <li>
+              {user.firstName} {user.lastName}
+            </li>
             <li>{user.email}</li>
             <li>
               <button onClick={logout}>Log Out</button>

@@ -29,8 +29,8 @@ function LoginFormModal() {
     setErrors({});
     return dispatch(
       sessionActions.login({
-        credential: "user2@user.io",
-        password: "password3",
+        credential: "sixlegs@user.io",
+        password: "password4",
       })
     )
       .then(closeModal)
