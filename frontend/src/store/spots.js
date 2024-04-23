@@ -26,7 +26,7 @@ function spotsReducer(state = initialState, action) {
   switch (action.type) {
     case SET_ALL_SPOTS: {
       const spotsState = {};
-      console.log("ACTION SPOTS---------", action.spots.Spots);
+      // console.log("ACTION SPOTS---------", action.spots.Spots);
       action.spots.Spots.forEach((spot) => {
         spotsState[spot.id] = spot;
       });

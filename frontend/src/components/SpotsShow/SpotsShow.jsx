@@ -3,6 +3,7 @@ import { getAllSpots } from "../../store/spots.js";
 import { useEffect } from "react";
 import SpotCard from "./SpotCard.jsx";
 import "./spotShow.css";
+import { Link } from "react-router-dom";
 
 function SpotsShow() {
   const dispatch = useDispatch();
@@ -15,18 +16,23 @@ function SpotsShow() {
   //   populate the spots store
 
   useEffect(() => {
-    console.log("USE EFFECT HAPPENING");
     dispatch(getAllSpots());
   }, [dispatch]);
 
-  console.log("SPOTSARR", spotsArr);
+  // console.log("SPOTSARR", spotsArr);
 
   return (
     <div className="below-nav">
       <div className="spots-show-gallery">
         {Object.keys(spotsArr[0]).length > 0 &&
           spotsArr.map((spot) => (
-            <SpotCard key={`${spot.id}${spot.name}`} spot={spot} />
+            <Link
+              to={`spots/${spot.id}`}
+              key={`${spot.id}${spot.name}`}
+              className="spot-card-link"
+            >
+              <SpotCard spot={spot} />
+            </Link>
           ))}
       </div>
     </div>
