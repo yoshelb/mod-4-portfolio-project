@@ -35,6 +35,7 @@ function Navigation({ isLoaded }) {
   return (
     <div className="nav-bar">
       <NavLink to="/">
+        gfdhgdhgfdh
         <img
           className="navLinkImg"
           src="/images/ant-sandwhich-logo.png"
