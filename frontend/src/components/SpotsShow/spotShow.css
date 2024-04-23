@@ -12,6 +12,11 @@
   background-size: cover;
   border-radius: 10%;
 }
+
+.spot-card-link {
+  text-decoration: none;
+  color: black;
+}
 /* .underSpotImg {
   display: flex;
   flex-direction: column;

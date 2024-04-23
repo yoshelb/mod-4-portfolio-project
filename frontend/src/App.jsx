@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation/Navigation-bonus";
 import * as sessionActions from "./store/session";
 import { Modal } from "./context/Modal";
 import SpotsShow from "./components/SpotsShow";
+import SpotDetails from "./components/SpotDetails/SpotDetails";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
             </main>
           </>
         ),
+      },
+      {
+        path: "/spots/:spotId",
+        element: <SpotDetails />,
       },
       // {
       //   path: 'login',

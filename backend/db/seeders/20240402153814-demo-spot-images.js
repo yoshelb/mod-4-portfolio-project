@@ -43,47 +43,47 @@ module.exports = {
         [
           {
             spotId: spt1.id,
-            url: "./images/spot-seed-images/stump-bnb.png",
+            url: "/images/spot-seed-images/stump-bnb.png",
             preview: true,
           },
           {
             spotId: spt2.id,
-            url: "./images/spot-seed-images/candy-bnb.png",
+            url: "/images/spot-seed-images/candy-bnb.png",
             preview: true,
           },
           {
             spotId: spt3.id,
-            url: "./images/spot-seed-images/sandwhich-bnb.png",
+            url: "/images/spot-seed-images/sandwhich-bnb.png",
             preview: true,
           },
           {
             spotId: spt4.id,
-            url: "./images/spot-seed-images/pebble-bnb.png",
+            url: "/images/spot-seed-images/pebble-bnb.png",
             preview: true,
           },
           {
             spotId: spt5.id,
-            url: "./images/spot-seed-images/dewdrop-bnb.png",
+            url: "/images/spot-seed-images/dewdrop-bnb.png",
             preview: true,
           },
           {
             spotId: spt6.id,
-            url: "./images/spot-seed-images/underground-bnb.png",
+            url: "/images/spot-seed-images/underground-bnb.png",
             preview: true,
           },
           {
             spotId: spt7.id,
-            url: "./images/spot-seed-images/garbage-bnb.png",
+            url: "/images/spot-seed-images/garbage-bnb.png",
             preview: true,
           },
           {
             spotId: spt8.id,
-            url: "./images/spot-seed-images/sandwhich-bnb.png",
+            url: "/images/spot-seed-images/sandwhich-bnb.png",
             preview: true,
           },
           {
             spotId: spt9.id,
-            url: "./images/spot-seed-images/sandwhich-bnb.png",
+            url: "/images/spot-seed-images/sandwhich-bnb.png",
             preview: true,
           },
         ],
@@ -102,12 +102,12 @@ module.exports = {
       {
         url: {
           [Op.in]: [
-            "./images/spot-seed-images/stump-bnb.png",
-            "./images/spot-seed-images/candy-bnb.png",
-            "./images/spot-seed-images/sandwhich-bnb.png",
-            "./images/spot-seed-images/pebble-bnb.png",
-            "./images/spot-seed-images/dewdrop-bnb.png",
-            "./images/spot-seed-images/garbage-bnb.png",
+            "/images/spot-seed-images/stump-bnb.png",
+            "/images/spot-seed-images/candy-bnb.png",
+            "/images/spot-seed-images/sandwhich-bnb.png",
+            "/images/spot-seed-images/pebble-bnb.png",
+            "/images/spot-seed-images/dewdrop-bnb.png",
+            "/images/spot-seed-images/garbage-bnb.png",
           ],
         },
       },

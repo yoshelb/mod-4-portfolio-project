@@ -1,0 +1,27 @@
+.gallery-div {
+  margin-top: 50px;
+  display: flex;
+  column-gap: 10px;
+  justify-content: center;
+}
+
+.preview-img-div {
+  width: 500px;
+  height: 500px;
+  background-size: cover;
+  border-radius: 5%;
+}
+
+.photo-square {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 500px;
+}
+.other-img-div {
+  width: auto;
+  height: auto;
+  background-size: cover;
+  border: 1px solid;
+  border-radius: 5%;
+}
