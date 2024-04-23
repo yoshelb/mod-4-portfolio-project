@@ -11,7 +11,7 @@ function Navigation({ isLoaded }) {
       <NavLink to="/">
         <img
           className="nav-link-img"
-          src="/public/images/ant-sandwhich-logo.png"
+          src="/images/ant-sandwhich-logo.png"
           alt="ant sandwhich icon"
         />
       </NavLink>

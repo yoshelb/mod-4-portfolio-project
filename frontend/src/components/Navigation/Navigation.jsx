@@ -33,7 +33,7 @@ function Navigation({ isLoaded }) {
   );
 
   return (
-    <div className="nav-bar">
+    <div className="hey-bar">
       <NavLink to="/">
         gfdhgdhgfdh
         <img
