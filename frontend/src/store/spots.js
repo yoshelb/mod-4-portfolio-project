@@ -1,10 +1,15 @@
 import { csrfFetch } from "./csrf.js";
 
 const SET_ALL_SPOTS = "spots/getAllSpots";
-
+const ADD_SPOT = "spots/addSpot";
 export const setAllSpots = (spots) => ({
   type: SET_ALL_SPOTS,
   spots,
+});
+
+export const addSpot = (spot) => ({
+  type: ADD_SPOT,
+  spot,
 });
 
 export const getAllSpots = () => async (dispatch) => {
@@ -20,6 +25,22 @@ export const getAllSpots = () => async (dispatch) => {
   }
 };
 
+export const createSpot = (newSpot) => async (dispatch) => {
+  console.log("NEW SPOT", newSpot);
+  const response = await csrfFetch("/api/spots", {
+    method: "POST",
+    "Content-Type": "application/json",
+    body: newSpot,
+  });
+  if (response.ok) {
+    const newSpot = response.json();
+    dispatch(addSpot(newSpot));
+    return newSpot;
+  } else {
+    console.log("BAD REQUEST");
+  }
+};
+
 const initialState = { spots: {} };
 
 function spotsReducer(state = initialState, action) {
@@ -31,6 +52,9 @@ function spotsReducer(state = initialState, action) {
         spotsState[spot.id] = spot;
       });
       return spotsState;
+    }
+    case ADD_SPOT: {
+      state[action.spot] = action.spot;
     }
 
     default:

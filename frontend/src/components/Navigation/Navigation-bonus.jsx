@@ -5,6 +5,7 @@ import "./Navigation.css";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
+  // console.log("sessionUser", sessionUser);
 
   return (
     <div className="nav-bar">
@@ -15,6 +16,12 @@ function Navigation({ isLoaded }) {
           alt="ant sandwhich icon"
         />
       </NavLink>
+      {sessionUser !== null && sessionUser && (
+        <NavLink to="/spots/new" className="new-spot-link">
+          Create New Spot
+        </NavLink>
+      )}
+
       <div className="profile-menu">
         {isLoaded && <ProfileButton user={sessionUser} />}
       </div>
