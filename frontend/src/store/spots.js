@@ -29,11 +29,13 @@ export const createSpot = (newSpot) => async (dispatch) => {
   console.log("NEW SPOT", newSpot);
   const response = await csrfFetch("/api/spots", {
     method: "POST",
-    "Content-Type": "application/json",
-    body: newSpot,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newSpot),
   });
   if (response.ok) {
-    const newSpot = response.json();
+    const newSpot = await response.json();
     dispatch(addSpot(newSpot));
     return newSpot;
   } else {
@@ -54,7 +56,9 @@ function spotsReducer(state = initialState, action) {
       return spotsState;
     }
     case ADD_SPOT: {
-      state[action.spot] = action.spot;
+      console.log("ACTION SPOT", action.spot);
+
+      return { ...state, [action.spot.id]: action.spot };
     }
 
     default:

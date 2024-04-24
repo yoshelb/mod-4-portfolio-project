@@ -3,21 +3,22 @@ import { getAllSpots } from "../../store/spots.js";
 import { useEffect } from "react";
 import SpotCard from "./SpotCard.jsx";
 import "./spotShow.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function SpotsShow() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const spotsObj = useSelector((state) => state.spots);
-  let spotsArr;
-  if (Object.keys(spotsObj).length > 0) {
-    spotsArr = Object.values(spotsObj);
-  }
+  let spotsArr = spotsObj ? Object.values(spotsObj) : [];
+  // if (Object.keys(spotsObj).length > 0) {
+  //   spotsArr = Object.values(spotsObj);
+  // }
 
   //   populate the spots store
 
   useEffect(() => {
     dispatch(getAllSpots());
-  }, [dispatch]);
+  }, [dispatch, location]);
 
   // console.log("SPOTSARR", spotsArr);
 
@@ -25,7 +26,7 @@ function SpotsShow() {
     <div className="below-nav">
       <div className="main-section-containter">
         <div className="spots-show-gallery">
-          {Object.keys(spotsArr[0]).length > 0 &&
+          {spotsArr.length > 0 &&
             spotsArr.map((spot) => (
               <Link
                 to={`spots/${spot.id}`}

@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import "./createASpot.css";
 import { createSpot } from "../../store/spots";
@@ -11,13 +11,15 @@ function CreateASpotForm() {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+  // const [lat, setLat] = useState("");
+  // const [lng, setLng] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [images, setImages] = useState({});
   const [errors, setErrors] = useState({});
+  const lat = 0;
+  const lng = 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,13 +27,15 @@ function CreateASpotForm() {
       address,
       city,
       state,
+      lat,
+      lng,
       country,
       name,
       description,
       price,
     };
-    let spotImages = {};
-    newSpot = JSON.stringify(newSpot);
+    // let spotImages = {};
+
     const spot = await dispatch(createSpot(newSpot));
     if (spot.id) {
       navigate(`/spots/${spot.id}`);
@@ -45,8 +49,8 @@ function CreateASpotForm() {
     if (!city) newErrors.city = "City is required";
     if (!state) newErrors.state = "State is required";
     if (!country) newErrors.country = "Country is required";
-    if (lat > 90 || lat < -90) newErrors.lat = "Latitude is not valid";
-    if (lng > 180 || lat < -180) newErrors.lng = "Longitude is not valid";
+    // if (lat > 90 || lat < -90) newErrors.lat = "Latitude is not valid";
+    // if (lng > 180 || lat < -180) newErrors.lng = "Longitude is not valid";
     if (!name) newErrors.name = "Name is required";
     if (name.length > 50)
       newErrors.name = "Name must be less than 50 characters";
@@ -54,21 +58,11 @@ function CreateASpotForm() {
     if (description.length < 30 && description.length > 0)
       newErrors.description = "Description must be longer than 30 characters";
     if (!price) newErrors.price = "Price per day is required";
+    if (price < 0) newErrors.price = "Price per day must be a positive number";
     if (Object.keys(images).length <= 0)
       newErrors.images = "You must submit at least one photo";
     setErrors(newErrors);
-  }, [
-    address,
-    city,
-    state,
-    country,
-    lat,
-    lng,
-    name,
-    description,
-    price,
-    images,
-  ]);
+  }, [address, city, state, country, name, description, price, images]);
 
   return (
     <div className="below-nav">
@@ -146,7 +140,7 @@ function CreateASpotForm() {
                 </div>
               )}
             </div>
-            <div className="lat-lng">
+            {/* <div className="lat-lng">
               <div className="lat-div">
                 <p>Latitude</p>
                 <input
@@ -162,8 +156,8 @@ function CreateASpotForm() {
                   value={lng}
                   onChange={(e) => setLng(e.target.value)}
                 ></input>
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
           <div className="middle-form-div">
             {/* DESCRIPTION ----------------*/}
@@ -235,10 +229,10 @@ function CreateASpotForm() {
               <input
                 placeholder="Preview Image URL"
                 onChange={(e) =>
-                  setImages(
-                    (images) =>
-                      (images.prev = { url: e.target.value, preview: true })
-                  )
+                  setImages((images) => ({
+                    ...images,
+                    prev: { url: e.target.value, preview: true },
+                  }))
                 }
               ></input>
             </div>
@@ -251,10 +245,10 @@ function CreateASpotForm() {
               <input
                 placeholder="Image URL"
                 onChange={(e) =>
-                  setImages(
-                    (images) =>
-                      (images.other1 = { url: e.target.value, preview: false })
-                  )
+                  setImages((images) => ({
+                    ...images,
+                    other1: { url: e.target.value, preview: false },
+                  }))
                 }
               ></input>
             </div>
@@ -262,10 +256,10 @@ function CreateASpotForm() {
               <input
                 placeholder="Image URL"
                 onChange={(e) =>
-                  setImages(
-                    (images) =>
-                      (images.other2 = { url: e.target.value, preview: false })
-                  )
+                  setImages((images) => ({
+                    ...images,
+                    other2: { url: e.target.value, preview: false },
+                  }))
                 }
               ></input>
             </div>
@@ -273,10 +267,10 @@ function CreateASpotForm() {
               <input
                 placeholder="Image URL"
                 onChange={(e) =>
-                  setImages(
-                    (images) =>
-                      (images.other3 = { url: e.target.value, preview: false })
-                  )
+                  setImages((images) => ({
+                    ...images,
+                    othe3: { url: e.target.value, preview: false },
+                  }))
                 }
               ></input>
             </div>
@@ -284,10 +278,10 @@ function CreateASpotForm() {
               <input
                 placeholder="Image URL"
                 onChange={(e) =>
-                  setImages(
-                    (images) =>
-                      (images.other4 = { url: e.target.value, preview: false })
-                  )
+                  setImages((images) => ({
+                    ...images,
+                    other4: { url: e.target.value, preview: false },
+                  }))
                 }
               ></input>
             </div>
