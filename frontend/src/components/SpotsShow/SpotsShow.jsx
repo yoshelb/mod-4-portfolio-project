@@ -23,17 +23,19 @@ function SpotsShow() {
 
   return (
     <div className="below-nav">
-      <div className="spots-show-gallery">
-        {Object.keys(spotsArr[0]).length > 0 &&
-          spotsArr.map((spot) => (
-            <Link
-              to={`spots/${spot.id}`}
-              key={`${spot.id}${spot.name}`}
-              className="spot-card-link"
-            >
-              <SpotCard spot={spot} />
-            </Link>
-          ))}
+      <div className="main-section-containter">
+        <div className="spots-show-gallery">
+          {Object.keys(spotsArr[0]).length > 0 &&
+            spotsArr.map((spot) => (
+              <Link
+                to={`spots/${spot.id}`}
+                key={`${spot.id}${spot.name}`}
+                className="spot-card-link"
+              >
+                <SpotCard spot={spot} />
+              </Link>
+            ))}
+        </div>
       </div>
     </div>
   );

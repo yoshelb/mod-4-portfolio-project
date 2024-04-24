@@ -6,4 +6,11 @@ body {
 
 .below-nav {
   margin: 150px 40px 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-section-containter {
+  max-width: 1000px;
 }

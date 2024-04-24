@@ -3,25 +3,106 @@
   display: flex;
   column-gap: 10px;
   justify-content: center;
+  border-radius: 18px;
+  height: fit-content;
+  width: fit-content;
+  overflow: hidden;
+  justify-content: center;
+  flex-wrap: wrap;
 }
-
+.title > h1 {
+  font-size: 50px;
+}
 .preview-img-div {
+  flex-basis: calc(50% - 5px);
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 250px;
+  min-height: 250px;
+  max-height: 500px;
+  max-width: 500px;
   width: 500px;
-  height: 500px;
+
   background-size: cover;
-  border-radius: 5%;
+  box-sizing: border-box;
+  position: relative;
+}
+.inside-img-div {
+  width: 100%;
+  padding-bottom: 100%;
 }
 
 .photo-square {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
+  flex-basis: calc(50% - 5px);
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 250px;
+  max-height: 500px;
+  max-width: 500;
   width: 500px;
+
+  column-gap: 10px;
+  row-gap: 10px;
 }
 .other-img-div {
   width: auto;
   height: auto;
   background-size: cover;
-  border: 1px solid;
-  border-radius: 5%;
+}
+
+/* PAGE MIDDLE */
+.description-and-booking-section {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 2px solid #c56518;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  column-gap: 30px;
+  box-sizing: border-box;
+}
+
+.bookings-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ebf0f4;
+  border-radius: 18px;
+  height: fit-content;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.top-of-bookings {
+  padding-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.ratingAndStar-bookings {
+  display: flex;
+  align-items: center;
+  column-gap: 3px;
+}
+.num-reviews-middle,
+.price-div,
+.avg-rating {
+  padding: 0;
+  margin: 0;
+}
+
+.booking-button {
+  background-color: #d9193b;
+  border: 1px solid #c1c8d1;
+  border-radius: 8px;
+  width: 80%;
+  height: 3em;
+  color: white;
+  font-weight: 600;
 }

@@ -15,7 +15,7 @@ function SpotCard({ spot }) {
             <h3 className="spot-card-address">{`${spot.city}, ${spot.state}`}</h3>
             <div className="ratingAndStar">
               <FaStar />
-              <p className="avgRating">{spot.avgRating}</p>
+              <p className="avgRating"> {spot.avgRating}</p>
             </div>
           </div>
           <p className="spot-card-price">{`$${spot.price} night`}</p>
