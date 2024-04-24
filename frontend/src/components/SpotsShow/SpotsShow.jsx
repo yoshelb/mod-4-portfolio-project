@@ -29,6 +29,7 @@ function SpotsShow() {
             spotsArr.map((spot) => (
               <Link
                 to={`spots/${spot.id}`}
+                title={spot.name}
                 key={`${spot.id}${spot.name}`}
                 className="spot-card-link"
               >

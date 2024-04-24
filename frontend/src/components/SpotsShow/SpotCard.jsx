@@ -4,7 +4,7 @@ function SpotCard({ spot }) {
   // console.log("SPOT SINGLE ______", spot);
   if (Object.keys(spot).length > 0) {
     return (
-      <div className="spot-card-div">
+      <div className="spot-card-div" title={spot.name}>
         <div
           className="spot-card-img"
           style={{ backgroundImage: `url('${spot.previewImage}')` }}
