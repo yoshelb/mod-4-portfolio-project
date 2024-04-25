@@ -61,6 +61,17 @@ function CreateASpotForm() {
     if (price < 0) newErrors.price = "Price per day must be a positive number";
     if (Object.keys(images).length <= 0)
       newErrors.images = "You must submit at least one photo";
+
+    Object.keys(images).forEach((key) => {
+      if (
+        !images[key].url.endsWith(".png") &&
+        !images[key].url.endsWith(".jpg") &&
+        !images[key].url.endsWith(".jpeg")
+      ) {
+        newErrors[key] = "Image URL must end in .png, .jpg, or .jpeg";
+      }
+    });
+
     setErrors(newErrors);
   }, [address, city, state, country, name, description, price, images]);
 
@@ -243,6 +254,11 @@ function CreateASpotForm() {
                     <p className="error-p">{errors.images}</p>
                   </div>
                 )}
+                {errors.prev && (
+                  <div>
+                    <p className="error-p">{errors.prev}</p>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -256,6 +272,11 @@ function CreateASpotForm() {
                   }
                 ></input>
               </div>
+              {errors.other1 && (
+                <div>
+                  <p className="error-p">{errors.other1}</p>
+                </div>
+              )}
               <div>
                 <input
                   placeholder="Image URL"
@@ -266,6 +287,11 @@ function CreateASpotForm() {
                     }))
                   }
                 ></input>
+                {errors.other2 && (
+                  <div>
+                    <p className="error-p">{errors.other2}</p>
+                  </div>
+                )}
               </div>
               <div>
                 <input
@@ -273,10 +299,15 @@ function CreateASpotForm() {
                   onChange={(e) =>
                     setImages((images) => ({
                       ...images,
-                      othe3: { url: e.target.value, preview: false },
+                      other3: { url: e.target.value, preview: false },
                     }))
                   }
                 ></input>
+                {errors.other3 && (
+                  <div>
+                    <p className="error-p">{errors.other3}</p>
+                  </div>
+                )}
               </div>
               <div>
                 <input
@@ -288,6 +319,11 @@ function CreateASpotForm() {
                     }))
                   }
                 ></input>
+                {errors.other4 && (
+                  <div>
+                    <p className="error-p">{errors.other4}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
