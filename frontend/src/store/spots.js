@@ -25,19 +25,41 @@ export const getAllSpots = () => async (dispatch) => {
   }
 };
 
-export const createSpot = (newSpot) => async (dispatch) => {
-  console.log("NEW SPOT", newSpot);
+export const createSpot = (payload) => async (dispatch) => {
+  // console.log("NEW SPOT", newSpot);
   const response = await csrfFetch("/api/spots", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(newSpot),
+    body: JSON.stringify(payload.newSpot),
   });
+  console.log("IMAGES PAYLOAD", payload.images);
   if (response.ok) {
     const newSpot = await response.json();
-    dispatch(addSpot(newSpot));
-    return newSpot;
+    const spotImages = [];
+
+    for (const image of Object.keys(payload.images)) {
+      console.log("INSIDE OF IMAGES", { ...payload.images[image] });
+      let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...payload.images[image] }),
+      });
+      console.log("NEW IMAGE NON JSON", newImage);
+      if (newImage.ok) {
+        newImage = await newImage.json();
+        spotImages.push(newImage);
+      }
+    }
+    console.log("SPOTIMAGES", spotImages);
+    const hasPreview = spotImages.some((image) => image.preview === true);
+    if (hasPreview) {
+      dispatch(addSpot(newSpot));
+      return newSpot;
+    }
   } else {
     console.log("BAD REQUEST");
   }
@@ -49,14 +71,14 @@ function spotsReducer(state = initialState, action) {
   switch (action.type) {
     case SET_ALL_SPOTS: {
       const spotsState = {};
-      // console.log("ACTION SPOTS---------", action.spots.Spots);
+      console.log("ACTION SPOTS---------", action.spots.Spots);
       action.spots.Spots.forEach((spot) => {
         spotsState[spot.id] = spot;
       });
       return spotsState;
     }
     case ADD_SPOT: {
-      console.log("ACTION SPOT", action.spot);
+      // console.log("ACTION SPOT", action.spot);
 
       return { ...state, [action.spot.id]: action.spot };
     }

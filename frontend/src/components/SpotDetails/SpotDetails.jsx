@@ -34,15 +34,15 @@ function SpotDetails() {
       const newImages = images.filter((image) => !image.preview);
       if (newPreview && newPreview.url !== previewImage.url) {
         setPreviewImage(newPreview);
-        console.log("PreviewIMG:", newPreview);
+        // console.log("PreviewIMG:", newPreview);
       }
       if (newImages.length !== otherImages.length) {
         setOtherImages(newImages);
-        console.log("Other IMg:", newImages);
+        // console.log("Other IMg:", newImages);
       }
-      console.log("URL", previewImage.url);
+      // console.log("URL", previewImage.url);
     }
-    console.log("CURRENT SPOT", currentSpot.id);
+    // console.log("CURRENT SPOT", currentSpot.id);
   }, [currentSpot, previewImage, otherImages, spotId]); // This effect runs only when currentSpot changes
 
   return (

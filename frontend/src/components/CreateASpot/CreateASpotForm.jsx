@@ -35,8 +35,8 @@ function CreateASpotForm() {
       price,
     };
     // let spotImages = {};
-
-    const spot = await dispatch(createSpot(newSpot));
+    const payload = { newSpot, images };
+    const spot = await dispatch(createSpot(payload));
     if (spot.id) {
       navigate(`/spots/${spot.id}`);
     }

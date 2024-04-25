@@ -8,7 +8,7 @@ export const setCurrentSpot = (spot) => ({
 });
 
 export const getSpotById = (spotId) => async (dispatch) => {
-  console.log("payload", spotId);
+  // console.log("payload", spotId);
   const response = await csrfFetch(`/api/spots/${spotId}`);
   const reviewsResponse = await csrfFetch(`/api/spots/${spotId}/reviews`);
   if (response.ok) {
@@ -21,7 +21,7 @@ export const getSpotById = (spotId) => async (dispatch) => {
       ...spot,
       ...reviews,
     };
-    console.log("REVIEWS PLUS SPOT", newSpot);
+    // console.log("REVIEWS PLUS SPOT", newSpot);
     dispatch(setCurrentSpot(newSpot));
   } else {
     return response;
