@@ -15,6 +15,9 @@ module.exports = {
       const u2 = await User.findOne({ where: { email: "mandible@user.io" } });
       const u3 = await User.findOne({ where: { email: "colony@user.io" } });
       const u4 = await User.findOne({ where: { email: "sixlegs@user.io" } });
+
+      console.log("SEEDING DEMO SPOTS TYPE OF ID", typeof u1.id);
+
       await Spot.bulkCreate(
         [
           {

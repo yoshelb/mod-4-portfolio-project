@@ -39,6 +39,8 @@ module.exports = {
         where: { address: "9 Leaf Lane" },
       });
 
+      console.log("SEEDING DEMO SPOT IMAGE", typeof spt1.id);
+
       await SpotImage.bulkCreate(
         [
           {
