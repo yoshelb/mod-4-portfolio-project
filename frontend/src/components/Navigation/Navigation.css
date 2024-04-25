@@ -69,3 +69,21 @@
 .logout-button:hover {
   cursor: pointer;
 }
+
+.create-and-profile {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 34px;
+}
+
+.new-spot-link {
+  margin-top: 20px;
+  text-decoration: none;
+  color: #0eb3d3;
+  /* font-family: "Lora", serif; */
+  font-size: 20px;
+  font-weight: 400;
+}
+.new-spot-link:hover {
+  color: #d9193b;
+}

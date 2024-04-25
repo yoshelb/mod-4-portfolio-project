@@ -89,18 +89,21 @@ const findAllSpotsWithPagination = async (
       }
 
       const numReviews = spot.dataValues.Reviews.length;
+      let avgRating;
+      if (numReviews <= 0) {
+        avgRating = "New";
+      } else {
+        avgRating =
+          spot.dataValues.Reviews.reduce((acc, obj) => {
+            acc += obj.stars;
+            return acc;
+          }, 0) / numReviews;
+        avgRating = avgRating.toFixed(2);
 
-      let avgRating =
-        spot.dataValues.Reviews.reduce((acc, obj) => {
-          acc += obj.stars;
-          return acc;
-        }, 0) / numReviews;
-
-      avgRating = avgRating.toFixed(2);
-
-      avgRatingArr = avgRating.toString().split(".");
-      if (avgRatingArr[1] == 0) {
-        avgRating = Math.round(avgRating);
+        let avgRatingArr = avgRating.toString().split(".");
+        if (avgRatingArr[1] == 0) {
+          avgRating = Math.round(avgRating);
+        }
       }
 
       const spotWithExtraData = {
@@ -131,7 +134,7 @@ function formatSpotResponse(spot) {
 
   spot.updatedAt = formatDate(spot.updatedAt);
 
-  if (typeof spot.avgRating === "string") {
+  if (typeof spot.avgRating === "string" && spot.avgRating !== "New") {
     spot.avgRating = parseFloat(spot.avgRating).toFixed(2);
   }
   return spot;

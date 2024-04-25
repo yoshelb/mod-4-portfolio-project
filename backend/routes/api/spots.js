@@ -178,17 +178,21 @@ router.get("/:spotId", async (req, res, next) => {
   }
 
   const numReviews = spot.dataValues.Reviews.length;
+  let avgRating;
+  if (numReviews <= 0) {
+    avgRating = "New";
+  } else {
+    avgRating =
+      spot.dataValues.Reviews.reduce((acc, obj) => {
+        acc += obj.stars;
+        return acc;
+      }, 0) / numReviews;
+    avgRating = avgRating.toFixed(2);
 
-  let avgRating =
-    spot.dataValues.Reviews.reduce((acc, obj) => {
-      acc += obj.stars;
-      return acc;
-    }, 0) / numReviews;
-  avgRating = avgRating.toFixed(2);
-
-  let avgRatingArr = avgRating.toString().split(".");
-  if (avgRatingArr[1] == 0) {
-    avgRating = Math.round(avgRating);
+    let avgRatingArr = avgRating.toString().split(".");
+    if (avgRatingArr[1] == 0) {
+      avgRating = Math.round(avgRating);
+    }
   }
 
   let spotCopy = { ...spot.dataValues, numReviews, avgRating };

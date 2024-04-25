@@ -16,14 +16,16 @@ function Navigation({ isLoaded }) {
           alt="ant sandwhich icon"
         />
       </NavLink>
-      {sessionUser !== null && sessionUser && (
-        <NavLink to="/spots/new" className="new-spot-link">
-          Create New Spot
-        </NavLink>
-      )}
+      <div className="create-and-profile">
+        {sessionUser !== null && sessionUser && (
+          <NavLink to="/spots/new" className="new-spot-link">
+            create new spot
+          </NavLink>
+        )}
 
-      <div className="profile-menu">
-        {isLoaded && <ProfileButton user={sessionUser} />}
+        <div className="profile-menu">
+          {isLoaded && <ProfileButton user={sessionUser} />}
+        </div>
       </div>
     </div>
   );

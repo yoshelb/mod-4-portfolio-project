@@ -1,4 +1,63 @@
+.main-section-containter {
+  margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.creat-spot-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-form-div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
 .error-p {
   color: #d9193b;
   font-size: 10px;
+}
+.city-state-div {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 15px;
+}
+.photo-input-div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+.price-input-label-div {
+  display: flex;
+  column-gap: 5px;
+}
+.input-div {
+  display: flex;
+  align-items: center;
+}
+label {
+  margin-right: 8px;
+}
+
+.submit-button {
+  margin-top: 20px;
+  width: 500px;
+  border-radius: 5px;
+  border: 1px solid #d9193b;
+  background-color: #d9193b;
+  color: white;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  border: 1px solid #c1c8d1;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
