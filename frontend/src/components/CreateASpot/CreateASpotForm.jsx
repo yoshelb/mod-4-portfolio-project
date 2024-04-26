@@ -221,7 +221,7 @@ function CreateASpotForm() {
                 <h2>$</h2>
                 <div className="input-div">
                   <input
-                    placeholder="Price per Night"
+                    placeholder="Price per Night(USD)"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                   ></input>
@@ -332,7 +332,7 @@ function CreateASpotForm() {
             type="submit"
             disabled={Object.keys(errors).length > 0 ? true : false}
           >
-            Create a Spot
+            Create Spot
           </button>
         </form>
       </div>
