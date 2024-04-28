@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserSpots } from "../../store/UserSpots";
 import { useEffect } from "react";
 import SpotCard from "../SpotsShow/SpotCard";
+import OpenModalButton from "../OpenModalButton";
+import DeleteSpotModal from "./DeleteSpotModal";
 
 function ManageSpots() {
   const dispatch = useDispatch();
@@ -40,7 +42,10 @@ function ManageSpots() {
                     <Link to={`/spots/${spot.id}/edit`}>
                       <button>Update</button>
                     </Link>
-                    <button>Delete</button>
+                    <OpenModalButton
+                      buttonText="Delete"
+                      modalComponent={<DeleteSpotModal spotId={spot.id} />}
+                    />
                   </div>
                 </div>
               ))}
