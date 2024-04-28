@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createReview } from "../store/currentSpot";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "../context/Modal";
 
 function ReviewFormModal({ currentSpot }) {
   const [starValue, setStarValue] = useState(0);
@@ -12,6 +13,7 @@ function ReviewFormModal({ currentSpot }) {
   const [backendError, setBackendError] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { closeModal } = useModal();
 
   useEffect(() => {
     let areErrors = false;
@@ -20,27 +22,26 @@ function ReviewFormModal({ currentSpot }) {
     setErrors(areErrors);
   }, [starValue, comment]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setErrors({});
     const review = {
       stars: starValue,
       review: comment,
     };
-    const response = await dispatch(
-      createReview({ review, spotId: currentSpot.id })
-    );
-    console.log("RESPONSE in submit", response);
-    if (response.ok !== true) {
-      console.log("response.errors", response);
-      if (response.errors) {
-        setBackendError(response.errors);
-      } else {
-        setBackendError({ error: response.statusText });
-      }
-    } else {
-      console.log("hitting the else");
-      navigate(`/spots/${currentSpot.id}`);
-    }
+    return dispatch(createReview({ review, spotId: currentSpot.id }))
+      .then(() => {
+        console.log("Default user login successful, closing modal");
+        navigate(`/spots/${currentSpot.id}`);
+        closeModal();
+      })
+      .catch(async (res) => {
+        console.log("catching and error", res);
+        const data = await res.json();
+        if (data && data.errors) {
+          setBackendError(data.errors);
+        }
+      });
   };
 
   return (

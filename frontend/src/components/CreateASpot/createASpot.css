@@ -23,6 +23,10 @@
   color: #d9193b;
   font-size: 10px;
 }
+.errors-and-label-div {
+  display: flex;
+  column-gap: ;
+}
 .city-state-div {
   display: flex;
   align-items: flex-start;
@@ -44,10 +48,21 @@
 label {
   margin-right: 8px;
 }
+input {
+  width: 100%;
+}
+textarea {
+  width: 100%;
+}
 
+.button-div {
+  display: flex;
+  justify-content: center;
+}
 .submit-button {
   margin-top: 20px;
-  width: 500px;
+  width: 200px;
+  height: 40px;
   border-radius: 5px;
   border: 1px solid #d9193b;
   background-color: #d9193b;

@@ -102,7 +102,7 @@ function SpotDetails() {
               {/* bookings section */}
               <div className="bookings-div">
                 <div className="top-of-bookings">
-                  <h2 className="price-div">${currentSpot.price} night</h2>
+                  <h2 className="price-div">${currentSpot.price} /night</h2>
                   <div className="ratingAndStar-bookings">
                     <FaStar />
                     <p className="avg-rating"> {currentSpot.avgRating}</p>

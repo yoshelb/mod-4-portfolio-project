@@ -15,10 +15,15 @@ function LoginFormModal() {
     e.preventDefault();
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
+      .then(() => {
+        console.log("Default user login successful, closing modal");
+        closeModal();
+      })
       .catch(async (res) => {
+        console.log("Default user login failed, handling errors");
         const data = await res.json();
         if (data && data.errors) {
+          console.log("Errors found:", data.errors);
           setErrors(data.errors);
         }
       });
@@ -66,7 +71,12 @@ function LoginFormModal() {
         </label>
         {errors.credential && <p>{errors.credential}</p>}
 
-        <button type="submit">Log In</button>
+        <button
+          disabled={credential.length < 4 || password.length < 6 ? true : false}
+          type="submit"
+        >
+          Log In
+        </button>
       </form>
       <button onClick={(e) => handleDefaultUser(e)}>Login Default User</button>
     </>

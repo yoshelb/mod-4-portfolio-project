@@ -15,23 +15,31 @@ export const addReview = (review) => ({
 });
 
 export const getSpotById = (spotId) => async (dispatch) => {
-  // console.log("payload", spotId);
-  const response = await csrfFetch(`/api/spots/${spotId}`);
-  const reviewsResponse = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  if (response.ok) {
+  try {
+    const response = await csrfFetch(`/api/spots/${spotId}`);
+    const reviewsResponse = await csrfFetch(`/api/spots/${spotId}/reviews`);
+
     const spot = await response.json();
-    let reviews;
-    if (reviewsResponse.ok) {
-      reviews = await reviewsResponse.json();
+
+    if (!response.ok) {
+      throw spot;
     }
+
+    const reviews = await reviewsResponse.json();
+
+    if (!reviewsResponse.ok) {
+      throw reviews;
+    }
+
     const newSpot = {
       ...spot,
       ...reviews,
     };
-    // console.log("REVIEWS PLUS SPOT", newSpot);
+
     dispatch(setCurrentSpot(newSpot));
-  } else {
-    return response;
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
 };
 
@@ -49,15 +57,41 @@ export const createReview =
         },
         body: JSON.stringify(review),
       });
-      if (reviewsResponse.ok) {
-        const review = await reviewsResponse.json();
-        dispatch(addReview(review));
-        return { ok: true };
+
+      const newReview = await reviewsResponse.json();
+
+      if (!reviewsResponse.ok) {
+        throw newReview;
       }
+
+      const fullReviewsResponse = await csrfFetch(
+        `/api/spots/${spotId}/reviews`
+      );
+
+      const fullReviews = await fullReviewsResponse.json();
+
+      if (!fullReviewsResponse.ok) {
+        throw fullReviews;
+      }
+      console.log("fulleviews", fullReviews);
+
+      if (fullReviews) {
+        const fullReview = fullReviews.Reviews.find(
+          (review) => review.id === newReview.id
+        );
+        console.log("FULL REVIEW", fullReview);
+        dispatch(
+          addReview({
+            ...fullReview,
+          })
+        );
+      }
+
+      return reviewsResponse;
     } catch (e) {
       // console.log("E IN CURREN SPOT", e);
-      const error = await e.json();
-      return error;
+      console.log(e);
+      throw e;
     }
   };
 
@@ -68,7 +102,7 @@ function currentSpotReducer(state = {}, action) {
     }
     case ADD_REVIEW: {
       const reviewAddedToSpot = { ...state };
-      reviewAddedToSpot.Reviews[action.review.id] = action.review.id;
+      reviewAddedToSpot.Reviews[action.review.id] = action.review;
       return reviewAddedToSpot;
     }
 
