@@ -28,14 +28,16 @@ function EditSpot() {
 
   return (
     <>
-      <h1>Update your Spot</h1>
-      {Object.keys(currentSpot).length > 0 && (
-        <CreateOrEditSpotForm
-          submitToParent={submitToParent}
-          currentSpot={currentSpot}
-          hideImages={true}
-        />
-      )}
+      <div className="below-nav">
+        <h1>Update your Spot</h1>
+        {Object.keys(currentSpot).length > 0 && (
+          <CreateOrEditSpotForm
+            submitToParent={submitToParent}
+            currentSpot={currentSpot}
+            hideImages={true}
+          />
+        )}
+      </div>
     </>
   );
 }
