@@ -20,12 +20,16 @@ export const login =
         method: "POST",
         body: JSON.stringify({ credential, password }),
       });
+
       const data = await response.json();
+      if (!response.ok) {
+        throw data;
+      }
       dispatch(setUser(data.user));
       return response;
     } catch (e) {
       console.log(e);
-      return e;
+      throw e;
     }
   };
 

@@ -6,12 +6,12 @@ import { useEffect } from "react";
 import { getSpotById } from "../../store/currentSpot.js";
 import { FaStar } from "react-icons/fa";
 import ReviewsSection from "./ReviewsSection.jsx";
+import { GoDotFill } from "react-icons/go";
 
 function SpotDetails() {
   const [previewImage, setPreviewImage] = useState("");
   const [otherImages, setOtherImages] = useState("");
 
-  //   const user = useSelector((state) => state.session).user;
   //   use this to check if a user is logged in
   //   console.log("user", user);
   const spotId = useParams().spotId;
@@ -102,14 +102,19 @@ function SpotDetails() {
               {/* bookings section */}
               <div className="bookings-div">
                 <div className="top-of-bookings">
-                  <h2 className="price-div">${currentSpot.price} night</h2>
+                  <h2 className="price-div">${currentSpot.price} /night</h2>
                   <div className="ratingAndStar-bookings">
                     <FaStar />
                     <p className="avg-rating"> {currentSpot.avgRating}</p>
                   </div>
-                  <p className="num-reviews-middle">
-                    {currentSpot.numReviews} reviews
-                  </p>
+
+                  {currentSpot.numReviews > 0 && <GoDotFill />}
+                  {currentSpot.numReviews > 0 && (
+                    <p className="num-reviews-middle">
+                      {currentSpot.numReviews}{" "}
+                      {currentSpot.numReviews > 1 ? "reviews" : "review"}
+                    </p>
+                  )}
                 </div>
                 <button
                   className="booking-button"

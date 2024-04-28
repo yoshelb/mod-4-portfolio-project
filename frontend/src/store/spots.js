@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf.js";
 
 const SET_ALL_SPOTS = "spots/getAllSpots";
 const ADD_SPOT = "spots/addSpot";
+
 export const setAllSpots = (spots) => ({
   type: SET_ALL_SPOTS,
   spots,
@@ -71,7 +72,7 @@ function spotsReducer(state = initialState, action) {
   switch (action.type) {
     case SET_ALL_SPOTS: {
       const spotsState = {};
-      console.log("ACTION SPOTS---------", action.spots.Spots);
+      // console.log("ACTION SPOTS---------", action.spots.Spots);
       action.spots.Spots.forEach((spot) => {
         spotsState[spot.id] = spot;
       });
