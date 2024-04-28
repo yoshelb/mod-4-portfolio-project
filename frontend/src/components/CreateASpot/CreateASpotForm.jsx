@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+
 import "./createASpot.css";
 import { createSpot } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +22,10 @@ function CreateASpotForm() {
       <div className="main-section-containter">
         <h1>Create a new Spot</h1>
 
-        <CreateOrEditSpotForm submitToParent={submitToParent} />
+        <CreateOrEditSpotForm
+          submitToParent={submitToParent}
+          hideImages={false}
+        />
       </div>
     </div>
   );

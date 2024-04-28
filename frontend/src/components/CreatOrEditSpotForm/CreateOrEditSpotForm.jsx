@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 
-function CreateOrEditSpotForm({ submitToParent }) {
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
+function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
+  const [address, setAddress] = useState(
+    currentSpot ? currentSpot.address : ""
+  );
+  const [city, setCity] = useState(currentSpot ? currentSpot.city : "");
+  const [state, setState] = useState(currentSpot ? currentSpot.state : "");
+  const [country, setCountry] = useState(
+    currentSpot ? currentSpot.country : ""
+  );
   // const [lat, setLat] = useState("");
   // const [lng, setLng] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [name, setName] = useState(currentSpot ? currentSpot.name : "");
+  const [description, setDescription] = useState(
+    currentSpot ? currentSpot.description : ""
+  );
+  const [price, setPrice] = useState(currentSpot ? currentSpot.price : "");
   const [images, setImages] = useState({});
   const [errors, setErrors] = useState({});
   const lat = 0;
@@ -32,18 +38,20 @@ function CreateOrEditSpotForm({ submitToParent }) {
       newErrors.description = "Description must be longer than 30 characters";
     if (!price) newErrors.price = "Price per day is required";
     if (price < 0) newErrors.price = "Price per day must be a positive number";
-    if (Object.keys(images).length <= 0)
-      newErrors.images = "You must submit at least one photo";
 
-    Object.keys(images).forEach((key) => {
-      if (
-        !images[key].url.endsWith(".png") &&
-        !images[key].url.endsWith(".jpg") &&
-        !images[key].url.endsWith(".jpeg")
-      ) {
-        newErrors[key] = "Image URL must end in .png, .jpg, or .jpeg";
-      }
-    });
+    if (!hideImages) {
+      if (Object.keys(images).length <= 0)
+        newErrors.images = "You must submit at least one photo";
+      Object.keys(images).forEach((key) => {
+        if (
+          !images[key].url.endsWith(".png") &&
+          !images[key].url.endsWith(".jpg") &&
+          !images[key].url.endsWith(".jpeg")
+        ) {
+          newErrors[key] = "Image URL must end in .png, .jpg, or .jpeg";
+        }
+      });
+    }
 
     setErrors(newErrors);
   }, [
@@ -56,6 +64,7 @@ function CreateOrEditSpotForm({ submitToParent }) {
     price,
     images,
     setErrors,
+    hideImages,
   ]);
 
   const handleSubmit = async (e) => {
@@ -106,7 +115,7 @@ function CreateOrEditSpotForm({ submitToParent }) {
             </div>
             <input
               className="country-input"
-              placeholder="Country"
+              placeholder={currentSpot ? currentSpot.country : "Country"}
               value={country}
               onChange={(e) => setCountry(e.target.value)}
             ></input>
@@ -123,7 +132,7 @@ function CreateOrEditSpotForm({ submitToParent }) {
             </div>
             <input
               className="address-input"
-              placeholder="Address"
+              placeholder={currentSpot ? currentSpot.address : "Address"}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             ></input>
@@ -141,7 +150,7 @@ function CreateOrEditSpotForm({ submitToParent }) {
               </div>
               <input
                 className="city-input"
-                placeholder="City"
+                placeholder={"City"}
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
               ></input>
@@ -159,7 +168,7 @@ function CreateOrEditSpotForm({ submitToParent }) {
               </div>
               <input
                 className="state-input"
-                placeholder="STATE"
+                placeholder={currentSpot ? currentSpot.state : "STATE"}
                 value={state}
                 onChange={(e) => setState(e.target.value)}
               ></input>
@@ -194,11 +203,13 @@ function CreateOrEditSpotForm({ submitToParent }) {
               neighborhood.
             </p>
             <textarea
-              placeholder="Please write at least 30 characters"
+              placeholder={"Please write at least 30 characters"}
               rows={5}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-            ></textarea>
+            >
+              {currentSpot && currentSpot.description}
+            </textarea>
             {errors.description && (
               <div>
                 <p className="error-p">{errors.description}</p>
@@ -249,96 +260,100 @@ function CreateOrEditSpotForm({ submitToParent }) {
         </div>
         {/* PHOTOS ---------------------- */}
         <div className="bottom-form">
-          <h2>Liven up your spot with photos</h2>
-          <p>Submit a link to at least one photo to publish your spot</p>
-          <div className="photo-input-div">
-            <div>
-              <input
-                placeholder="Preview Image URL"
-                onChange={(e) =>
-                  setImages((images) => ({
-                    ...images,
-                    prev: { url: e.target.value, preview: true },
-                  }))
-                }
-              ></input>
-              {errors.images && (
+          {!hideImages && (
+            <div className="images-div">
+              <h2>Liven up your spot with photos</h2>
+              <p>Submit a link to at least one photo to publish your spot</p>
+              <div className="photo-input-div">
                 <div>
-                  <p className="error-p">{errors.images}</p>
+                  <input
+                    placeholder="Preview Image URL"
+                    onChange={(e) =>
+                      setImages((images) => ({
+                        ...images,
+                        prev: { url: e.target.value, preview: true },
+                      }))
+                    }
+                  ></input>
+                  {errors.images && (
+                    <div>
+                      <p className="error-p">{errors.images}</p>
+                    </div>
+                  )}
+                  {errors.prev && (
+                    <div>
+                      <p className="error-p">{errors.prev}</p>
+                    </div>
+                  )}
                 </div>
-              )}
-              {errors.prev && (
-                <div>
-                  <p className="error-p">{errors.prev}</p>
-                </div>
-              )}
-            </div>
 
-            <div>
-              <input
-                placeholder="Image URL"
-                onChange={(e) =>
-                  setImages((images) => ({
-                    ...images,
-                    other1: { url: e.target.value, preview: false },
-                  }))
-                }
-              ></input>
-            </div>
-            {errors.other1 && (
-              <div>
-                <p className="error-p">{errors.other1}</p>
+                <div>
+                  <input
+                    placeholder="Image URL"
+                    onChange={(e) =>
+                      setImages((images) => ({
+                        ...images,
+                        other1: { url: e.target.value, preview: false },
+                      }))
+                    }
+                  ></input>
+                </div>
+                {errors.other1 && (
+                  <div>
+                    <p className="error-p">{errors.other1}</p>
+                  </div>
+                )}
+                <div>
+                  <input
+                    placeholder="Image URL"
+                    onChange={(e) =>
+                      setImages((images) => ({
+                        ...images,
+                        other2: { url: e.target.value, preview: false },
+                      }))
+                    }
+                  ></input>
+                  {errors.other2 && (
+                    <div>
+                      <p className="error-p">{errors.other2}</p>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <input
+                    placeholder="Image URL"
+                    onChange={(e) =>
+                      setImages((images) => ({
+                        ...images,
+                        other3: { url: e.target.value, preview: false },
+                      }))
+                    }
+                  ></input>
+                  {errors.other3 && (
+                    <div>
+                      <p className="error-p">{errors.other3}</p>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <input
+                    placeholder="Image URL"
+                    onChange={(e) =>
+                      setImages((images) => ({
+                        ...images,
+                        other4: { url: e.target.value, preview: false },
+                      }))
+                    }
+                  ></input>
+                  {errors.other4 && (
+                    <div>
+                      <p className="error-p">{errors.other4}</p>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-            <div>
-              <input
-                placeholder="Image URL"
-                onChange={(e) =>
-                  setImages((images) => ({
-                    ...images,
-                    other2: { url: e.target.value, preview: false },
-                  }))
-                }
-              ></input>
-              {errors.other2 && (
-                <div>
-                  <p className="error-p">{errors.other2}</p>
-                </div>
-              )}
             </div>
-            <div>
-              <input
-                placeholder="Image URL"
-                onChange={(e) =>
-                  setImages((images) => ({
-                    ...images,
-                    other3: { url: e.target.value, preview: false },
-                  }))
-                }
-              ></input>
-              {errors.other3 && (
-                <div>
-                  <p className="error-p">{errors.other3}</p>
-                </div>
-              )}
-            </div>
-            <div>
-              <input
-                placeholder="Image URL"
-                onChange={(e) =>
-                  setImages((images) => ({
-                    ...images,
-                    other4: { url: e.target.value, preview: false },
-                  }))
-                }
-              ></input>
-              {errors.other4 && (
-                <div>
-                  <p className="error-p">{errors.other4}</p>
-                </div>
-              )}
-            </div>
-          </div>
+          )}
         </div>
         <div className="button-div">
           <button

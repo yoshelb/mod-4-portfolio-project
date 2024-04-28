@@ -1,5 +1,6 @@
 // import spot from "../../../backend/db/models/spot.js";
 import { csrfFetch } from "./csrf.js";
+import { getAllSpots } from "./spots.js";
 
 const SET_CURRENT_SPOT = "currentSpot/setCurrentSpot";
 const ADD_REVIEW = "currentSpot/addReview";
@@ -42,6 +43,28 @@ export const getSpotById = (spotId) => async (dispatch) => {
     throw e;
   }
 };
+
+export const updateSpot =
+  ({ payload, spotId }) =>
+  async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload.newSpot),
+    });
+    console.log("response INSIDE UPDATE", response);
+    if (response.ok) {
+      const newSpot = await response.json();
+      console.log("newSpot", newSpot);
+      await dispatch(getSpotById(newSpot.id));
+      await dispatch(getAllSpots());
+      return newSpot;
+    } else {
+      console.log("BAD REQUEST");
+    }
+  };
 
 export const createReview =
   ({ review, spotId }) =>
