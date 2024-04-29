@@ -46,12 +46,11 @@ const findAllSpots = async (whereObj = undefined) => {
     }
     let fortmattedPrice;
     if (spot.price) {
-      const priceArr = spot.price.split(".");
-      if (spot[1] && spot[1].length === 1) {
-        fortmattedPrice = priceArr.join() + "0";
-        console.log("FORMATTED PRICE");
+      const priceArr = spot.price.toString().split(".");
+      if (priceArr[1] && priceArr[1].length == 1) {
+        fortmattedPrice = `${priceArr[0]}.${priceArr[1]}0`;
       } else {
-        fortmattedPrice = price;
+        fortmattedPrice = spot.price;
       }
     }
 
@@ -59,6 +58,7 @@ const findAllSpots = async (whereObj = undefined) => {
       ...spot.dataValues,
       previewImage: previewImage,
       avgRating: avgRating,
+      price: fortmattedPrice,
     };
     delete spotWithExtraData.Reviews;
     delete spotWithExtraData.SpotImages;
@@ -116,10 +116,21 @@ const findAllSpotsWithPagination = async (
         avgRating = avgRating.toFixed(2);
       }
 
+      let fortmattedPrice;
+      if (spot.price) {
+        const priceArr = spot.price.toString().split(".");
+        if (priceArr[1] && priceArr[1].length == 1) {
+          fortmattedPrice = `${priceArr[0]}.${priceArr[1]}0`;
+        } else {
+          fortmattedPrice = spot.price;
+        }
+      }
+
       const spotWithExtraData = {
         ...spot.dataValues,
         previewImage: previewImage,
         avgRating: avgRating,
+        price: fortmattedPrice,
       };
       delete spotWithExtraData.Reviews;
       delete spotWithExtraData.SpotImages;
@@ -136,7 +147,6 @@ const findAllSpotsWithPagination = async (
 };
 
 function formatSpotResponse(spot) {
-  spot.price = parseFloat(spot.price);
   spot.lat = parseFloat(spot.lat);
   spot.lng = parseFloat(spot.lng);
 
