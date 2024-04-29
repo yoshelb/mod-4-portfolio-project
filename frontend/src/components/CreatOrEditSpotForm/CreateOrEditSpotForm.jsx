@@ -37,7 +37,12 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
     if (description.length < 30 && description.length > 0)
       newErrors.description = "Description must be longer than 30 characters";
     if (!price) newErrors.price = "Price per day is required";
+
+    if (isNaN(price) || !isFinite(Number(price)))
+      newErrors.price = "Price per day must be a positive number";
     if (price < 0) newErrors.price = "Price per day must be a positive number";
+    if (price.split(".")[1] && price.split(".")[1].length > 2)
+      newErrors.price = "Price per day may not have more than 2 decimal places";
 
     if (!hideImages) {
       if (Object.keys(images).length <= 0)
@@ -69,6 +74,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     let newSpot = {
       address,
       city,
