@@ -25,7 +25,7 @@ function ManageSpots() {
         <div className="manage-spots-main">
           <h1>Manage Spots</h1>
           <NavLink to="/spots/new">
-            <button className="CreateSpotbutton">create new spot</button>{" "}
+            <button className="CreateSpotbutton">Create a New Spot</button>{" "}
           </NavLink>
           <div className="main-section-containter">
             <div className="spots-show-gallery">

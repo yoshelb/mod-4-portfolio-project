@@ -168,7 +168,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
               </div>
               <input
                 className="state-input"
-                placeholder={currentSpot ? currentSpot.state : "STATE"}
+                placeholder={currentSpot ? currentSpot.state : "State"}
                 value={state}
                 onChange={(e) => setState(e.target.value)}
               ></input>
@@ -245,7 +245,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
               <h2>$</h2>
               <div className="input-div">
                 <input
-                  placeholder="Price per Night(USD)"
+                  placeholder="Price per Night (USD)"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                 ></input>
@@ -263,7 +263,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
           {!hideImages && (
             <div className="images-div">
               <h2>Liven up your spot with photos</h2>
-              <p>Submit a link to at least one photo to publish your spot</p>
+              <p>Submit a link to at least one photo to publish your spot.</p>
               <div className="photo-input-div">
                 <div>
                   <input
@@ -361,7 +361,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
             type="submit"
             // disabled={Object.keys(errors).length > 0 ? true : false}
           >
-            Create Spot
+            {currentSpot ? "Update your Spot" : "Create Spot"}
           </button>
         </div>
       </form>
