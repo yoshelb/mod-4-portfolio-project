@@ -3,6 +3,7 @@ import { GoDotFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 import OpenModalButton from "../OpenModalButton";
 import ReviewFormModal from "../../ReviewFormModal/ReviewFormModal";
+import DeleteReviewModal from "./DeleteReviewModal";
 
 // ORDER SPOTS BY CREATION DATE
 
@@ -59,18 +60,27 @@ function ReviewsSection({ currentSpot }) {
                     // day: "numeric", // numeric, 2-digit
                   });
                 }
+                console.log("REVIEWID", review.id);
                 const fullDate = formatDate(review.createdAt);
                 return (
                   <div key={review.id}>
                     <h4>{review.User.firstName}</h4>
                     <p>{fullDate}</p>
                     <p>{review.review}</p>
+                    {user && user.id === review.User.id && (
+                      <OpenModalButton
+                        buttonText="Delete"
+                        modalComponent={
+                          <DeleteReviewModal reviewId={review.id} />
+                        }
+                      />
+                    )}
                   </div>
                 );
               })}
-            {userNotOwner && currentSpot.numReviews <= 0 && (
+            {/* {userNotOwner && currentSpot.numReviews <= 0 && (
               <p>Be the first to post a review!</p>
-            )}
+            )} */}
           </div>
         </>
       )}

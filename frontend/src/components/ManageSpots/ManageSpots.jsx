@@ -22,7 +22,7 @@ function ManageSpots() {
   return (
     <>
       <div className="below-nav">
-        <h1>Manage Your Spots</h1>
+        <h1>Manage Spots</h1>
         <NavLink to="/spots/new">
           <button className="CreateSpotbutton">create new spot</button>{" "}
         </NavLink>
