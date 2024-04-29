@@ -41,20 +41,34 @@ export const restoreUser = () => async (dispatch) => {
 };
 
 export const signup = (user) => async (dispatch) => {
-  const { username, firstName, lastName, email, password } = user;
-  const response = await csrfFetch("/api/users", {
-    method: "POST",
-    body: JSON.stringify({
-      username,
-      firstName,
-      lastName,
-      email,
-      password,
-    }),
-  });
-  const data = await response.json();
-  dispatch(setUser(data.user));
-  return response;
+  try {
+    const { username, firstName, lastName, email, password } = user;
+    console.log("INSIDE OF THUNK");
+    const response = await csrfFetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify({
+        username,
+        firstName,
+        lastName,
+        email,
+        password,
+      }),
+    });
+    console.log("beforejson:", response);
+
+    const data = await response.json();
+    console.log("afterjson:", data);
+
+    if (!response.ok) {
+      console.log("error data:", data);
+      throw data;
+    }
+    dispatch(setUser(data.user));
+    return data;
+  } catch (e) {
+    console.log("ERROR INSIDE CATCH", e);
+    throw e;
+  }
 };
 
 export const logout = () => async (dispatch) => {

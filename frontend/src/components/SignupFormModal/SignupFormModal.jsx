@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import * as sessionActions from '../../store/session';
-import './SignupForm.css';
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useModal } from "../../context/Modal";
+import * as sessionActions from "../../store/session";
+import "./SignupForm.css";
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -15,6 +15,24 @@ function SignupFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+  useEffect(() => {
+    const newErrors = {};
+    if (email.length <= 0) newErrors.email = "Email is required";
+    if (username.length <= 0) newErrors.username = "Username is required";
+    if (username.length < 4 && username / length > 0)
+      newErrors.username = "Username must be longer than 4 characters";
+    if (firstName.length <= 0) newErrors.firstName = "First name is required";
+
+    if (lastName.length <= 0) newErrors.lastName = "Last name is required";
+    if (password.length <= 0) newErrors.password = "Password is required";
+    if (password.length < 6 && password.length > 0)
+      newErrors.password = "Password must be longer than 6 charcters";
+    if (password !== confirmPassword)
+      newErrors.confirmPassword =
+        "Confirm Password field must be the same as the Password field";
+    setErrors(newErrors);
+  }, [email, username, firstName, lastName, password, confirmPassword]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
@@ -25,7 +43,7 @@ function SignupFormModal() {
           username,
           firstName,
           lastName,
-          password
+          password,
         })
       )
         .then(closeModal)
@@ -33,11 +51,13 @@ function SignupFormModal() {
           const data = await res.json();
           if (data?.errors) {
             setErrors(data.errors);
+            console.log("ERRORS FROM BACKEND", data.errors, "errors", errors);
           }
         });
     }
     return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
+      confirmPassword:
+        "Confirm Password field must be the same as the Password field",
     });
   };
 
@@ -105,7 +125,12 @@ function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        <button
+          type="submit"
+          disabled={Object.keys(errors).length > 0 ? true : false}
+        >
+          Sign Up
+        </button>
       </form>
     </>
   );
