@@ -48,18 +48,27 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
       newErrors.price = "Price per day may not have more than 2 decimal places";
 
     if (!hideImages) {
-      if (Object.keys(images).length <= 0)
+      console.log("IMAGES", images);
+      if (!images.prev || images.prev.url.length <= 0) {
         newErrors.images = "You must submit at least one photo";
+      }
       Object.keys(images).forEach((key) => {
-        if (
-          !images[key].url.endsWith(".png") &&
-          !images[key].url.endsWith(".jpg") &&
-          !images[key].url.endsWith(".jpeg")
-        ) {
-          newErrors[key] = "Image URL must end in .png, .jpg, or .jpeg";
+        console.log("KEY", key);
+        if (images[key].preview === true && images[key].url.length <= 0) {
+          newErrors.prev = "You must submit at least one photo";
         }
+        console.log("images key", images[key]);
+        if (images[key].preview === true || images[key].url.length > 0)
+          if (
+            !images[key].url.endsWith(".png") &&
+            !images[key].url.endsWith(".jpg") &&
+            !images[key].url.endsWith(".jpeg")
+          ) {
+            newErrors[key] = "Image URL must end in .png, .jpg, or .jpeg";
+          }
       });
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length > 0 ? false : true;
   };

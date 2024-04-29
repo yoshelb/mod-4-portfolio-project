@@ -96,10 +96,12 @@
 /*PROFILE INSIDE  */
 .user-greeting {
   font-weight: 600;
+  margin: 0;
 }
 .user-email {
   font-size: 0.85rem;
   color: #7a7f84;
+  margin-top: 5px;
 }
 
 .manage-spots-link {
