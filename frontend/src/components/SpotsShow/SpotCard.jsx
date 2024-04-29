@@ -1,4 +1,4 @@
-// import { FaStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import "./spotShow.css";
 function SpotCard({ spot }) {
   // console.log("SPOT SINGLE ______", spot);
@@ -14,7 +14,7 @@ function SpotCard({ spot }) {
           <div className="underSpotImg-top">
             <h3 className="spot-card-address">{`${spot.city}, ${spot.state}`}</h3>
             <div className="ratingAndStar">
-              <p>·</p>
+              <FaStar />
               <p className="avgRating"> {spot.avgRating}</p>
             </div>
           </div>
