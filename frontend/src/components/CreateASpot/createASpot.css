@@ -25,12 +25,13 @@
 }
 .errors-and-label-div {
   display: flex;
-  column-gap: ;
+  column-gap: 10px;
 }
 .city-state-div {
   display: flex;
   align-items: flex-start;
   column-gap: 15px;
+  height: 100%;
 }
 .photo-input-div {
   display: flex;
@@ -75,4 +76,11 @@ textarea {
   color: #666;
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.comma-div {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  column-gap: 3px;
 }

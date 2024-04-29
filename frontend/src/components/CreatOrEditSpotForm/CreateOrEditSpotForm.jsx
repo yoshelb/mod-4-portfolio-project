@@ -157,13 +157,15 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
                   </div>
                 )}
               </div>
-              <input
-                className="city-input"
-                placeholder={"City"}
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-              ></input>
-              <span> ,</span>
+              <div className="comma-div">
+                <input
+                  className="city-input"
+                  placeholder={"City"}
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                ></input>
+                <span> ,</span>
+              </div>
             </div>
 
             <div className="state-div">
