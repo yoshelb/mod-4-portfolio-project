@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { getSpotById } from "../../store/currentSpot.js";
 import { FaStar } from "react-icons/fa";
 import ReviewsSection from "./ReviewsSection.jsx";
-import { GoDotFill } from "react-icons/go";
+// import { GoDotFill } from "react-icons/go";
 
 function SpotDetails() {
   const [previewImage, setPreviewImage] = useState("");
@@ -109,18 +109,18 @@ function SpotDetails() {
                     <FaStar />
                     <p className="avg-rating"> {currentSpot.avgRating}</p>
 
-                    {currentSpot.numReviews > 0 && <GoDotFill />}
+                    {currentSpot.numReviews > 0 && <p> · </p>}
                     {currentSpot.numReviews > 0 && (
                       <p className="num-reviews-middle">
                         {currentSpot.numReviews}{" "}
-                        {currentSpot.numReviews > 1 ? "reviews" : "review"}
+                        {currentSpot.numReviews > 1 ? "Reviews" : "Review"}
                       </p>
                     )}
                   </div>
                 </div>
                 <button
                   className="booking-button"
-                  onClick={() => alert("Feature Coming Soon...")}
+                  onClick={() => alert("Feature coming soon")}
                 >
                   Reserve
                 </button>

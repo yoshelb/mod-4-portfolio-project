@@ -94,7 +94,7 @@
 .ratingAndStar-bookings {
   display: flex;
   align-items: center;
-  column-gap: 3px;
+  column-gap: 5px;
 }
 .num-reviews-middle,
 .price-div,

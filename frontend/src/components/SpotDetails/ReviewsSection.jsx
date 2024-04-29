@@ -1,5 +1,5 @@
 import { FaStar } from "react-icons/fa";
-import { GoDotFill } from "react-icons/go";
+// import { GoDotFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 import OpenModalButton from "../OpenModalButton";
 import ReviewFormModal from "../../ReviewFormModal/ReviewFormModal";
@@ -28,11 +28,11 @@ function ReviewsSection({ currentSpot }) {
           <FaStar />
           <p className="avgRating"> {currentSpot.avgRating}</p>
         </div>
-        {currentSpot.numReviews > 0 && <GoDotFill />}
+        {currentSpot.numReviews > 0 && <p>·</p>}
         {currentSpot.numReviews > 0 && (
           <p className="num-ratings-middle">
             {currentSpot.numReviews}{" "}
-            {currentSpot.numReviews > 1 ? "reviews" : "review"}
+            {currentSpot.numReviews > 1 ? "Reviews" : "Review"}
           </p>
         )}
       </div>
