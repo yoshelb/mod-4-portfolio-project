@@ -28,6 +28,7 @@ function EditSpot() {
 
   return (
     <>
+      {/* {currentSpot.id == spotId && ( */}
       <div className="below-nav">
         <h1>Update your Spot</h1>
         {Object.keys(currentSpot).length > 0 && (
@@ -38,6 +39,7 @@ function EditSpot() {
           />
         )}
       </div>
+      {/* )} */}
     </>
   );
 }

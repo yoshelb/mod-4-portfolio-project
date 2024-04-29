@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
   const [address, setAddress] = useState(
@@ -21,7 +21,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
   const lat = 0;
   const lng = 0;
 
-  useEffect(() => {
+  const validateSpot = () => {
     const newErrors = {};
     // address validations:
     if (!address) newErrors.address = "Street address is required";
@@ -41,7 +41,10 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
     if (isNaN(price) || !isFinite(Number(price)))
       newErrors.price = "Price per day must be a positive number";
     if (price < 0) newErrors.price = "Price per day must be a positive number";
-    if (price.split(".")[1] && price.split(".")[1].length > 2)
+    if (
+      price.toString().split(".")[1] &&
+      price.toString().split(".")[1].length > 2
+    )
       newErrors.price = "Price per day may not have more than 2 decimal places";
 
     if (!hideImages) {
@@ -57,23 +60,14 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
         }
       });
     }
-
     setErrors(newErrors);
-  }, [
-    address,
-    city,
-    state,
-    country,
-    name,
-    description,
-    price,
-    images,
-    setErrors,
-    hideImages,
-  ]);
+    return Object.keys(newErrors).length > 0 ? false : true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const isvalid = validateSpot();
+    if (!isvalid) return;
 
     let newSpot = {
       address,
@@ -365,7 +359,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
           <button
             className="submit-button"
             type="submit"
-            disabled={Object.keys(errors).length > 0 ? true : false}
+            // disabled={Object.keys(errors).length > 0 ? true : false}
           >
             Create Spot
           </button>

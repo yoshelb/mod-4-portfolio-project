@@ -70,28 +70,6 @@ function SignupFormModal() {
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Email
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          {errors.email && <p className="form-errors">{errors.email}</p>}
-        </label>
-
-        <label>
-          Username
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          {errors.username && <p className="form-errors">{errors.username}</p>}
-        </label>
-
-        <label>
           First Name
           <input
             type="text"
@@ -113,6 +91,28 @@ function SignupFormModal() {
             required
           />
           {errors.lastName && <p className="form-errors">{errors.lastName}</p>}
+        </label>
+
+        <label>
+          Email
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          {errors.email && <p className="form-errors">{errors.email}</p>}
+        </label>
+
+        <label>
+          Username
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          {errors.username && <p className="form-errors">{errors.username}</p>}
         </label>
 
         <label>

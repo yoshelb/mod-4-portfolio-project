@@ -189,8 +189,22 @@ router.get("/:spotId", async (req, res, next) => {
       }, 0) / numReviews;
     avgRating = avgRating.toFixed(2);
   }
+  let fortmattedPrice;
+  if (spot.price) {
+    const priceArr = spot.price.toString().split(".");
+    if (priceArr[1] && priceArr[1].length == 1) {
+      fortmattedPrice = `${priceArr[0]}.${priceArr[1]}0`;
+    } else {
+      fortmattedPrice = spot.price;
+    }
+  }
 
-  let spotCopy = { ...spot.dataValues, numReviews, avgRating };
+  let spotCopy = {
+    ...spot.dataValues,
+    numReviews,
+    avgRating,
+    price: fortmattedPrice,
+  };
 
   delete spotCopy.Reviews;
 
