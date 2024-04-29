@@ -19,7 +19,7 @@ function SignupFormModal() {
     const newErrors = {};
     if (email.length <= 0) newErrors.email = "Email is required";
     if (username.length <= 0) newErrors.username = "Username is required";
-    if (username.length < 4 && username / length > 0)
+    if (username.length < 4)
       newErrors.username = "Username must be longer than 4 characters";
     if (firstName.length <= 0) newErrors.firstName = "First name is required";
 
