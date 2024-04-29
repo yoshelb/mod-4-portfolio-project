@@ -60,8 +60,9 @@ function ReviewsSection({ currentSpot }) {
                     // day: "numeric", // numeric, 2-digit
                   });
                 }
-                console.log("REVIEWID", review.id);
+
                 const fullDate = formatDate(review.createdAt);
+                console.log("CURRENT SPOT IN PARENT:", currentSpot);
                 return (
                   <div key={review.id}>
                     <h4>{review.User.firstName}</h4>
@@ -71,7 +72,10 @@ function ReviewsSection({ currentSpot }) {
                       <OpenModalButton
                         buttonText="Delete"
                         modalComponent={
-                          <DeleteReviewModal reviewId={review.id} />
+                          <DeleteReviewModal
+                            reviewId={review.id}
+                            currentSpot={currentSpot}
+                          />
                         }
                       />
                     )}

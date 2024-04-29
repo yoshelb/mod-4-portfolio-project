@@ -109,11 +109,12 @@ export const createReview =
           (review) => review.id === newReview.id
         );
         console.log("FULL REVIEW", fullReview);
-        dispatch(
-          addReview({
-            ...fullReview,
-          })
-        );
+        await dispatch(getSpotById(spotId));
+        // // dispatch(
+        // //   addReview({
+        // //     ...fullReview,
+        // //   })
+        // );
       }
 
       return reviewsResponse;
@@ -125,9 +126,10 @@ export const createReview =
   };
 
 export const deleteReview =
-  ({ reviewId }) =>
+  ({ reviewId, currentSpot }) =>
   async (dispatch) => {
     try {
+      console.log("CURRENT SPOT", currentSpot);
       const response = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: "DELETE",
       });
@@ -136,6 +138,7 @@ export const deleteReview =
         throw message;
       }
       await dispatch(removeReview(reviewId));
+      await dispatch(getSpotById(currentSpot.id));
       return response;
     } catch (e) {
       console.log(e);

@@ -2,13 +2,13 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { deleteReview } from "../../store/currentSpot";
 
-function DeleteReviewModal(reviewId) {
+function DeleteReviewModal({ reviewId, currentSpot }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   const handleYesClick = (e) => {
     e.preventDefault();
-
-    return dispatch(deleteReview(reviewId))
+    console.log("CURRENT SPOT IN modal", currentSpot);
+    return dispatch(deleteReview({ reviewId, currentSpot }))
       .then(() => {
         console.log("Delete successful, closing modal");
         closeModal();
