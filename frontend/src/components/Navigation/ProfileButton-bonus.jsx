@@ -73,7 +73,7 @@ function ProfileButton({ user }) {
             </li>
             <li>
               <Link to="/spots/current" className="manage-spots-link">
-                Mange Spots
+                Manage Spots
               </Link>
             </li>
             <li>

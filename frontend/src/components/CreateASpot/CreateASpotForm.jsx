@@ -20,7 +20,7 @@ function CreateASpotForm() {
   return (
     <div className="below-nav">
       <div className="main-section-containter">
-        <h1>Create a new Spot</h1>
+        <h1>Create a New Spot</h1>
 
         <CreateOrEditSpotForm
           submitToParent={submitToParent}

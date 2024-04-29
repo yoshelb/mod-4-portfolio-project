@@ -88,7 +88,7 @@ function LoginFormModal() {
         className="default-user-button"
         onClick={(e) => handleDefaultUser(e)}
       >
-        Login Default User
+        Log in as Demo User
       </button>
     </>
   );

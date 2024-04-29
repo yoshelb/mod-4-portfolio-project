@@ -44,6 +44,16 @@ const findAllSpots = async (whereObj = undefined) => {
         }, 0) / numReviews;
       avgRating = avgRating.toFixed(2);
     }
+    let fortmattedPrice;
+    if (spot.price) {
+      const priceArr = spot.price.split(".");
+      if (spot[1] && spot[1].length === 1) {
+        fortmattedPrice = priceArr.join() + "0";
+        console.log("FORMATTED PRICE");
+      } else {
+        fortmattedPrice = price;
+      }
+    }
 
     const spotWithExtraData = {
       ...spot.dataValues,

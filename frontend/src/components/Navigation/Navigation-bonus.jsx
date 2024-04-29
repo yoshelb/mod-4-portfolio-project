@@ -19,7 +19,7 @@ function Navigation({ isLoaded }) {
       <div className="create-and-profile">
         {sessionUser !== null && sessionUser && (
           <NavLink to="/spots/new" className="new-spot-link">
-            create new spot
+            Create a New Spot
           </NavLink>
         )}
 
