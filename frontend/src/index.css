@@ -5,12 +5,55 @@ body {
 }
 
 .below-nav {
-  margin: 150px 40px 0 40px;
+  margin: 180px 40px 0 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.front-page-container {
+  max-width: 1500px;
+}
+
 .main-section-containter {
   max-width: 1000px;
+}
+
+button {
+  font-family: "Lora", serif;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+#modal-content {
+  border-radius: 18px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+#modal-content > h1 {
+  margin: 0;
+}
+
+#modal-content > form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+input,
+textarea {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+}
+
+.form-errors {
+  color: #cf030d;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+#modal-content > h1 {
+  text-align: center;
 }

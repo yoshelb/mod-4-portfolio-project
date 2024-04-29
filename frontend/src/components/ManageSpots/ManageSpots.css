@@ -1,0 +1,50 @@
+/* .manage-spots.main {
+  display: ;
+} */
+
+.spots-show-gallery {
+  margin-top: 50px;
+  display: flex;
+  column-gap: 40px;
+  row-gap: 60px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.spot-card-buttons {
+  margin-top: 15px;
+  display: flex;
+  column-gap: 15px;
+}
+
+/* DELETE SPOTS MODAL */
+
+.confirm-delete-div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  align-items: center;
+}
+
+.confirm-delete-div > h1 {
+  margin: 0;
+}
+
+.confirm-delete-div > button {
+  width: 100%;
+}
+
+.yes-delete {
+  background-color: #e89498;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.yes-delete:hover {
+  background-color: #cf030d;
+  color: white;
+}
+button {
+  cursor: pointer;
+}

@@ -62,12 +62,12 @@ function ReviewsSection({ currentSpot }) {
                 }
 
                 const fullDate = formatDate(review.createdAt);
-                console.log("CURRENT SPOT IN PARENT:", currentSpot);
+
                 return (
-                  <div key={review.id}>
-                    <h4>{review.User.firstName}</h4>
-                    <p>{fullDate}</p>
-                    <p>{review.review}</p>
+                  <div key={review.id} className="review-detail-div">
+                    <h4 className="review-title">{review.User.firstName}</h4>
+                    <p className="review-date">{fullDate}</p>
+                    <p className="review-content">{review.review}</p>
                     {user && user.id === review.User.id && (
                       <OpenModalButton
                         buttonText="Delete"

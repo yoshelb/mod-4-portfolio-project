@@ -1,7 +1,7 @@
 import { FaStar } from "react-icons/fa";
 import "./spotShow.css";
 function SpotCard({ spot }) {
-  // console.log("SPOT SINGLE ______", spot);
+  console.log("SPOT SINGLE ______", spot);
   if (Object.keys(spot).length > 0) {
     return (
       <div className="spot-card-div" title={spot.name}>

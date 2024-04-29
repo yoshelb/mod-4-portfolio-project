@@ -73,8 +73,9 @@ function SignupFormModal() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          {errors.email && <p className="form-errors">{errors.email}</p>}
         </label>
-        {errors.email && <p>{errors.email}</p>}
+
         <label>
           Username
           <input
@@ -83,8 +84,9 @@ function SignupFormModal() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+          {errors.username && <p className="form-errors">{errors.username}</p>}
         </label>
-        {errors.username && <p>{errors.username}</p>}
+
         <label>
           First Name
           <input
@@ -93,8 +95,11 @@ function SignupFormModal() {
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
+          {errors.firstName && (
+            <p className="form-errors">{errors.firstName}</p>
+          )}
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
+
         <label>
           Last Name
           <input
@@ -103,8 +108,9 @@ function SignupFormModal() {
             onChange={(e) => setLastName(e.target.value)}
             required
           />
+          {errors.lastName && <p className="form-errors">{errors.lastName}</p>}
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
+
         <label>
           Password
           <input
@@ -113,8 +119,9 @@ function SignupFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {errors.password && <p className="form-errors">{errors.password}</p>}
         </label>
-        {errors.password && <p>{errors.password}</p>}
+
         <label>
           Confirm Password
           <input
@@ -123,9 +130,13 @@ function SignupFormModal() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+          {errors.confirmPassword && (
+            <p className="form-errors">{errors.confirmPassword}</p>
+          )}
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+
         <button
+          className="sign-up-button"
           type="submit"
           disabled={Object.keys(errors).length > 0 ? true : false}
         >

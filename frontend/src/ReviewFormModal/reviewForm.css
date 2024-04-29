@@ -1,0 +1,11 @@
+.stars-and-label {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  justify-content: center;
+}
+
+.star-buttons-div > button {
+  background-color: transparent;
+  border: none;
+}

@@ -24,7 +24,7 @@ function SpotsShow() {
 
   return (
     <div className="below-nav">
-      <div className="main-section-containter">
+      <div className="front-page-container">
         <div className="spots-show-gallery">
           {spotsArr.length > 0 &&
             spotsArr.map((spot) => (

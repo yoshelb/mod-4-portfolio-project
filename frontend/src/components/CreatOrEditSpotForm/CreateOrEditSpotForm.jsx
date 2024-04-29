@@ -235,7 +235,7 @@ function CreateOrEditSpotForm({ submitToParent, hideImages, currentSpot }) {
             )}
           </div>
           {/* PRICE------------------- */}
-          <div className="price-div">
+          <div className="price-div-edit-create">
             <h2>Set a base price for your spot</h2>
             <p>
               Competitive pricing can help your listing stand out and rank

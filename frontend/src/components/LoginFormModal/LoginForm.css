@@ -1,0 +1,13 @@
+.default-user-button {
+  font-family: "roboto", sans-serif;
+  background-color: transparent;
+  border: none;
+  color: #0eb3d3;
+  text-decoration: underline;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.default-user-button:hover {
+  color: black;
+}

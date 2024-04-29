@@ -3,9 +3,11 @@ import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
+import { useNavigate } from "react-router-dom";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -19,6 +21,7 @@ function LoginFormModal() {
         console.log("Default user login successful, closing modal");
         closeModal();
       })
+      .then(() => navigate("/"))
       .catch(async (res) => {
         console.log("Default user login failed, handling errors");
         const data = await res.json();
@@ -39,6 +42,7 @@ function LoginFormModal() {
       })
     )
       .then(closeModal)
+      .then(() => navigate("/"))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
@@ -69,7 +73,9 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && <p>{errors.credential}</p>}
+        {errors.credential && (
+          <p className="form-errors">{errors.credential}</p>
+        )}
 
         <button
           disabled={credential.length < 4 || password.length < 6 ? true : false}
@@ -78,7 +84,12 @@ function LoginFormModal() {
           Log In
         </button>
       </form>
-      <button onClick={(e) => handleDefaultUser(e)}>Login Default User</button>
+      <button
+        className="default-user-button"
+        onClick={(e) => handleDefaultUser(e)}
+      >
+        Login Default User
+      </button>
     </>
   );
 }

@@ -29,14 +29,14 @@ function DeleteSpotModal({ spotId }) {
   };
 
   return (
-    <div>
+    <div className="confirm-delete-div">
       <h1>Confirm Delete</h1>
       <p>Are you sure you want to remove this spot from the listings?</p>
       <button className="yes-delete" onClick={(e) => handleYesClick(e)}>
-        Yes(Delete Spot)
+        Yes (Delete Spot)
       </button>
       <button className="no-delete" onClick={(e) => handleNoClick(e)}>
-        No(Keep Spot)
+        No (Keep Spot)
       </button>
     </div>
   );

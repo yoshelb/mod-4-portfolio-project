@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { createReview } from "../store/currentSpot";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../context/Modal";
+import "./reviewForm.css";
 
 function ReviewFormModal({ currentSpot }) {
   const [starValue, setStarValue] = useState(0);

@@ -15,22 +15,14 @@ const findAllSpots = async (whereObj = undefined) => {
     include: [
       {
         model: Review,
-        attributes: [],
+        attributes: ["stars"],
       },
       {
         model: SpotImage,
         attributes: ["url"],
         where: { preview: true },
-        limit: 1,
       },
     ],
-    attributes: {
-      include: [
-        [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgRating"],
-      ],
-      exclude: [],
-    },
-    group: ["Spot.id"],
   });
 
   let newBody = [];
@@ -40,14 +32,27 @@ const findAllSpots = async (whereObj = undefined) => {
       previewImage = spot.SpotImages[0].dataValues.url;
     }
 
+    const numReviews = spot.dataValues.Reviews.length;
+    let avgRating;
+    if (numReviews <= 0) {
+      avgRating = "New";
+    } else {
+      avgRating =
+        spot.dataValues.Reviews.reduce((acc, obj) => {
+          acc += obj.stars;
+          return acc;
+        }, 0) / numReviews;
+      avgRating = avgRating.toFixed(2);
+    }
+
     const spotWithExtraData = {
       ...spot.dataValues,
       previewImage: previewImage,
+      avgRating: avgRating,
     };
-
+    delete spotWithExtraData.Reviews;
     delete spotWithExtraData.SpotImages;
     const formattedBody = formatSpotResponse(spotWithExtraData);
-
     newBody.push(formattedBody);
   });
 

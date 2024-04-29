@@ -7,7 +7,8 @@
   border: 1px solid #c1c8d1;
   background-color: #ebf0f4;
   border-radius: 18px;
-  padding: 10px;
+  padding: 15px;
+  box-sizing: border-box;
 }
 .profile-menu > button {
   position: relative;
@@ -64,10 +65,13 @@
 .logout-button {
   background-color: white;
   border: 1px solid #c1c8d1;
-  border-radius: 18px;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 14px;
 }
 .logout-button:hover {
   cursor: pointer;
+  background-color: #c1c8d1;
 }
 
 .create-and-profile {
@@ -84,6 +88,28 @@
   font-size: 20px;
   font-weight: 400;
 }
-.new-spot-link:hover {
+.new-spot-link:hover,
+.manage-spots-link:hover {
   color: #d9193b;
+}
+
+/*PROFILE INSIDE  */
+.user-greeting {
+  font-weight: 600;
+}
+.user-email {
+  font-size: 0.85rem;
+  color: #7a7f84;
+}
+
+.manage-spots-link {
+  text-decoration: none;
+  color: #0eb3d3;
+  font-weight: 400;
+}
+
+/* LOG IN AND SIGN UP BUTTONS */
+.log-in-modal,
+.log-in-modal {
+  cursor: pointer;
 }

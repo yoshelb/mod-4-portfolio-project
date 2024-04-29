@@ -102,19 +102,21 @@ function SpotDetails() {
               {/* bookings section */}
               <div className="bookings-div">
                 <div className="top-of-bookings">
-                  <h2 className="price-div">${currentSpot.price} /night</h2>
+                  <div className="price-div">
+                    <h2>${currentSpot.price} </h2> <span>/night</span>
+                  </div>
                   <div className="ratingAndStar-bookings">
                     <FaStar />
                     <p className="avg-rating"> {currentSpot.avgRating}</p>
-                  </div>
 
-                  {currentSpot.numReviews > 0 && <GoDotFill />}
-                  {currentSpot.numReviews > 0 && (
-                    <p className="num-reviews-middle">
-                      {currentSpot.numReviews}{" "}
-                      {currentSpot.numReviews > 1 ? "reviews" : "review"}
-                    </p>
-                  )}
+                    {currentSpot.numReviews > 0 && <GoDotFill />}
+                    {currentSpot.numReviews > 0 && (
+                      <p className="num-reviews-middle">
+                        {currentSpot.numReviews}{" "}
+                        {currentSpot.numReviews > 1 ? "reviews" : "review"}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <button
                   className="booking-button"
@@ -123,6 +125,9 @@ function SpotDetails() {
                   Reserve
                 </button>
               </div>
+            </div>
+            {/* REVIEWS SECTION */}
+            <div className="reviews-section-div">
               <ReviewsSection currentSpot={currentSpot} />
             </div>
           </main>
